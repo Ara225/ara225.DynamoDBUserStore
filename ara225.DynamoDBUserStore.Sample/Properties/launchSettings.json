@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:23574",
-      "sslPort": 44306
+      "applicationUrl": "http://localhost:2675",
+      "sslPort": 44385
     }
   },
   "profiles": {
@@ -17,7 +17,6 @@
     },
     "ara225.DynamoDBUserStore.Sample": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
