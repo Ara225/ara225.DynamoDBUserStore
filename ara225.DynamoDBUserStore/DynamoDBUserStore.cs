@@ -15,51 +15,54 @@ namespace ara225.DynamoDBUserStore
             _dataAccess = da;
         }
 
-        public async Task<bool> GetTwoFactorEnabledAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<bool> GetTwoFactorEnabledAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return user.TwoFactorEnabled;
+            return Task.Run(() => { return user.TwoFactorEnabled; });
         }
 
-        public async Task SetTwoFactorEnabledAsync(DynamoDBUser user, bool enabled, CancellationToken cancellationToken)
+        public Task SetTwoFactorEnabledAsync(DynamoDBUser user, bool enabled, CancellationToken cancellationToken)
         {
-            user.TwoFactorEnabled = enabled;
+             return Task.Run(() => { user.TwoFactorEnabled = enabled; });
         }
 
-        public async Task<string> GetAuthenticatorKeyAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<string> GetAuthenticatorKeyAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return user.AuthenticatorKey;
+            return Task.Run(() => { return user.AuthenticatorKey; });
         }
 
-        public async Task SetAuthenticatorKeyAsync(DynamoDBUser user, string key, CancellationToken cancellationToken)
+        public Task SetAuthenticatorKeyAsync(DynamoDBUser user, string key, CancellationToken cancellationToken)
         {
-            user.AuthenticatorKey = key;
+            return Task.Run(() => { user.AuthenticatorKey = key; });
         }
 
-        public async Task<string> GetPhoneNumberAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<string> GetPhoneNumberAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return user.PhoneNumber;
+            return Task.Run(() => { return user.PhoneNumber; });
         }
 
-        public async Task<bool> GetPhoneNumberConfirmedAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<bool> GetPhoneNumberConfirmedAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return user.PhoneNumberConfirmed;
+            return Task.Run(() => { return user.PhoneNumberConfirmed; });
         }
 
-        public async Task SetPhoneNumberAsync(DynamoDBUser user, string phoneNumber, CancellationToken cancellationToken)
+        public Task SetPhoneNumberAsync(DynamoDBUser user, string phoneNumber, CancellationToken cancellationToken)
         {
-            user.PhoneNumber = phoneNumber;
+            return Task.Run(() => { user.PhoneNumber = phoneNumber; });
         }
 
-        public async Task SetPhoneNumberConfirmedAsync(DynamoDBUser user, bool confirmed, CancellationToken cancellationToken)
+        public Task SetPhoneNumberConfirmedAsync(DynamoDBUser user, bool confirmed, CancellationToken cancellationToken)
         {
-            user.PhoneNumberConfirmed = confirmed;
+            return Task.Run(() => { user.PhoneNumberConfirmed = confirmed; });
         }
 
-        public async Task AddLoginAsync(DynamoDBUser user, UserLoginInfo login, CancellationToken cancellationToken)
+        public Task AddLoginAsync(DynamoDBUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            user.LoginProviderDisplayNames.Add(login.ProviderDisplayName);
-            user.LoginProviderKeys.Add(login.ProviderKey);
-            user.LoginProviders.Add(login.LoginProvider);
+            return Task.Run(() =>
+            {
+                user.LoginProviderDisplayNames.Add(login.ProviderDisplayName);
+                user.LoginProviderKeys.Add(login.ProviderKey);
+                user.LoginProviders.Add(login.LoginProvider);
+            });
         }
 
         public async Task<IdentityResult> CreateAsync(DynamoDBUser user, CancellationToken cancellationToken)
@@ -130,108 +133,123 @@ namespace ara225.DynamoDBUserStore
             return await _dataAccess.GetUserByAttribute("NormalizedUserName", NormalizedUserName);
         }
 
-        public async Task<string> GetEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<string> GetEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return user.Email;
+            return Task.Run(() => { return user.Email; });
         }
 
-        public async Task<bool> GetEmailConfirmedAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<bool> GetEmailConfirmedAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return user.EmailConfirmed;
+            return Task.Run(() => { return user.EmailConfirmed; });
         }
 
-        public async Task<IList<UserLoginInfo>> GetLoginsAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            List<UserLoginInfo> UserLogins = new List<UserLoginInfo>();
-            for (int i = 0; i < user.LoginProviders.Count; i++)
+            return Task.Run(() =>
             {
-                UserLogins.Add(new UserLoginInfo(user.LoginProviders[i], user.LoginProviderKeys[i], user.LoginProviderDisplayNames[i]));
-            }
-            return UserLogins;
-        }
-
-        public async Task<string> GetNormalizedEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
-        {
-            return user.NormalizedEmail;
-        }
-
-        public async Task<string> GetNormalizedUserNameAsync(DynamoDBUser user, CancellationToken cancellationToken)
-        {
-            return user.NormalizedUserName;
-        }
-
-        public async Task<string> GetPasswordHashAsync(DynamoDBUser user, CancellationToken cancellationToken)
-        {
-            return user.PasswordHash;
-        }
-
-        public async Task<string> GetUserIdAsync(DynamoDBUser user, CancellationToken cancellationToken)
-        {
-            return user.Id;
-        }
-
-        public async Task<string> GetUserNameAsync(DynamoDBUser user, CancellationToken cancellationToken)
-        {
-            return user.UserName;
-        }
-
-        public async Task<bool> HasPasswordAsync(DynamoDBUser user, CancellationToken cancellationToken)
-        {
-            if (user.PasswordHash == null || user.PasswordHash.Count() == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        public async Task RemoveLoginAsync(DynamoDBUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
-        {
-            user.SecurityStamp = Guid.NewGuid().ToString();
-            for (int i = 0; i < user.LoginProviderKeys.Count; i++)
-            {
-                if (user.LoginProviderKeys[i] == providerKey)
+                IList<UserLoginInfo> UserLogins = new List<UserLoginInfo>();
+                for (int i = 0; i < user.LoginProviders.Count; i++)
                 {
-                    user.LoginProviderKeys.RemoveAt(i);
-                    user.LoginProviderDisplayNames.RemoveAt(i);
-                    user.LoginProviders.RemoveAt(i);
-                    break;
+                    UserLogins.Add(new UserLoginInfo(user.LoginProviders[i], user.LoginProviderKeys[i], user.LoginProviderDisplayNames[i]));
                 }
-            }
+                return UserLogins;
+            });
         }
 
-        public async Task SetEmailAsync(DynamoDBUser user, string email, CancellationToken cancellationToken)
+        public Task<string> GetNormalizedEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            user.Email = email;
+            return Task.Run(() => { return user.NormalizedEmail; });
         }
 
-        public async Task SetEmailConfirmedAsync(DynamoDBUser user, bool confirmed, CancellationToken cancellationToken)
+        public Task<string> GetNormalizedUserNameAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            user.EmailConfirmed = confirmed;
+            return Task.Run(() => { return user.NormalizedUserName; });
         }
 
-        public async Task SetNormalizedEmailAsync(DynamoDBUser user, string normalizedEmail, CancellationToken cancellationToken)
+        public Task<string> GetPasswordHashAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            user.NormalizedEmail = normalizedEmail;
+            return Task.Run(() => { return user.PasswordHash; });
         }
 
-        public async Task SetNormalizedUserNameAsync(DynamoDBUser user, string normalizedName, CancellationToken cancellationToken)
+        public Task<string> GetUserIdAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            user.NormalizedUserName = normalizedName;
+            return Task.Run(() => { return user.Id; });
         }
 
-        public async Task SetPasswordHashAsync(DynamoDBUser user, string passwordHash, CancellationToken cancellationToken)
+        public Task<string> GetUserNameAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            user.SecurityStamp = Guid.NewGuid().ToString();
-            user.PasswordHash = passwordHash;
+            return Task.Run(() => { return user.UserName; });
         }
 
-        public async Task SetUserNameAsync(DynamoDBUser user, string userName, CancellationToken cancellationToken)
+        public Task<bool> HasPasswordAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            user.UserName = userName;
-            user.NormalizedUserName = userName.ToUpper();
+            return Task.Run(() =>
+            {
+                if (user.PasswordHash == null || user.PasswordHash.Count() == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            });
+        }
+
+        public Task RemoveLoginAsync(DynamoDBUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                user.SecurityStamp = Guid.NewGuid().ToString();
+                for (int i = 0; i < user.LoginProviderKeys.Count; i++)
+                {
+                    if (user.LoginProviderKeys[i] == providerKey)
+                    {
+                        user.LoginProviderKeys.RemoveAt(i);
+                        user.LoginProviderDisplayNames.RemoveAt(i);
+                        user.LoginProviders.RemoveAt(i);
+                        break;
+                    }
+                }
+            });
+        }
+
+        public Task SetEmailAsync(DynamoDBUser user, string email, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => { user.Email = email; });
+        }
+
+        public Task SetEmailConfirmedAsync(DynamoDBUser user, bool confirmed, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => { user.EmailConfirmed = confirmed; });
+        }
+
+        public Task SetNormalizedEmailAsync(DynamoDBUser user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => { user.NormalizedEmail = normalizedEmail; });
+        }
+
+        public Task SetNormalizedUserNameAsync(DynamoDBUser user, string normalizedName, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => { user.NormalizedUserName = normalizedName; });
+        }
+
+        public Task SetPasswordHashAsync(DynamoDBUser user, string passwordHash, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => 
+            {
+                user.SecurityStamp = Guid.NewGuid().ToString();
+                user.PasswordHash = passwordHash;
+            });
+        }
+
+        public Task SetUserNameAsync(DynamoDBUser user, string userName, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                user.UserName = userName;
+                user.NormalizedUserName = userName.ToUpper();
+            });
         }
 
         public async Task<IdentityResult> UpdateAsync(DynamoDBUser user, CancellationToken cancellationToken)
@@ -246,26 +264,32 @@ namespace ara225.DynamoDBUserStore
             return Result;
         }
 
-        public async Task ReplaceCodesAsync(DynamoDBUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+        public Task ReplaceCodesAsync(DynamoDBUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
         {
-            user.RecoveryCodes = recoveryCodes.ToList();
+            return Task.Run(() =>
+            {
+                user.RecoveryCodes = recoveryCodes.ToList();
+            });
         }
 
-        public async Task<bool> RedeemCodeAsync(DynamoDBUser user, string code, CancellationToken cancellationToken)
+        public Task<bool> RedeemCodeAsync(DynamoDBUser user, string code, CancellationToken cancellationToken)
         {
-            return user.RecoveryCodes.Remove(code);
+            return Task.Run(() => { return user.RecoveryCodes.Remove(code); });
         }
 
-        public async Task<int> CountCodesAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        public Task<int> CountCodesAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            if (user.RecoveryCodes != null)
+            return Task.Run(() =>
             {
-                return user.RecoveryCodes.Count;
-            }
-            else
-            {
-                return 0;
-            }
+                if (user.RecoveryCodes != null)
+                {
+                    return user.RecoveryCodes.Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            });
         }
     }
 }
