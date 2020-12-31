@@ -2,12 +2,25 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
-    public class DynamoDBUserStore : IUserTwoFactorRecoveryCodeStore<DynamoDBUser>, IUserTwoFactorStore<DynamoDBUser>, IUserAuthenticatorKeyStore<DynamoDBUser>, IUserPhoneNumberStore<DynamoDBUser>, IUserPasswordStore<DynamoDBUser>, IUserEmailStore<DynamoDBUser>, IUserLoginStore<DynamoDBUser>
+    public class DynamoDBUserStore : 
+        IUserTwoFactorRecoveryCodeStore<DynamoDBUser>, 
+        IUserTwoFactorStore<DynamoDBUser>, 
+        IUserAuthenticatorKeyStore<DynamoDBUser>, 
+        IUserPhoneNumberStore<DynamoDBUser>, 
+        IUserPasswordStore<DynamoDBUser>, 
+        IUserEmailStore<DynamoDBUser>, 
+        IUserLoginStore<DynamoDBUser>,
+        IUserClaimStore<DynamoDBUser>,
+        IUserSecurityStampStore<DynamoDBUser>,
+        IUserLockoutStore<DynamoDBUser>,
+        IUserRoleStore<DynamoDBUser>,
+        IUserStore<DynamoDBUser>
     {
         private DynamoDBDataAccessLayer _dataAccess;
         public DynamoDBUserStore(DynamoDBDataAccessLayer da)
@@ -290,6 +303,101 @@ namespace ara225.DynamoDBUserStore
                     return 0;
                 }
             });
+        }
+
+        public Task<IList<Claim>> GetClaimsAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddClaimsAsync(DynamoDBUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ReplaceClaimAsync(DynamoDBUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveClaimsAsync(DynamoDBUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<DynamoDBUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetSecurityStampAsync(DynamoDBUser user, string stamp, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetSecurityStampAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DateTimeOffset?> GetLockoutEndDateAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetLockoutEndDateAsync(DynamoDBUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ResetAccessFailedCountAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetAccessFailedCountAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetLockoutEnabledAsync(DynamoDBUser user, bool enabled, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddToRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveFromRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<string>> GetRolesAsync(DynamoDBUser user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsInRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<DynamoDBUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
