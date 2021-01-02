@@ -332,47 +332,85 @@ namespace ara225.DynamoDBUserStore
 
         public Task SetSecurityStampAsync(DynamoDBUser user, string stamp, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => { user.SecurityStamp = stamp; });
         }
 
         public Task<string> GetSecurityStampAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => { return user.SecurityStamp; });
         }
 
         public Task<DateTimeOffset?> GetLockoutEndDateAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                DateTimeOffset? ReturnValue;
+                if (user.LockoutEndDateUtc == null)
+                {
+                    ReturnValue = null;
+                }
+                else
+                {
+                    ReturnValue = DateTimeOffset.Parse(user.LockoutEndDateUtc.ToString());
+                }
+                return ReturnValue;
+            });
         }
 
         public Task SetLockoutEndDateAsync(DynamoDBUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => 
+            {
+                if (lockoutEnd == null)
+                {
+                    return;
+                }
+                else
+                {
+                    user.LockoutEndDateUtc = lockoutEnd.Value.UtcDateTime;
+                }
+            });
         }
 
         public Task<int> IncrementAccessFailedCountAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => 
+            {
+                user.AccessFailedCount = user.AccessFailedCount + 1;
+                return user.AccessFailedCount;
+            });
         }
 
         public Task ResetAccessFailedCountAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                user.AccessFailedCount = 0;
+            });
         }
 
         public Task<int> GetAccessFailedCountAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                return user.AccessFailedCount;
+            });
         }
 
         public Task<bool> GetLockoutEnabledAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                return user.LockoutEnabled;
+            });
         }
 
         public Task SetLockoutEnabledAsync(DynamoDBUser user, bool enabled, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                user.LockoutEnabled = enabled;
+            });
         }
 
         public Task AddToRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)

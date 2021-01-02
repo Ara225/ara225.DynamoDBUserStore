@@ -24,6 +24,7 @@ namespace ara225.DynamoDBUserStore
             LoginProviders = new List<string>();
             LoginProviderKeys = new List<string>();
             LoginProviderDisplayNames = new List<string>();
+            AccessFailedCount = 0;
         }
 
         //
@@ -91,7 +92,10 @@ namespace ara225.DynamoDBUserStore
         // Summary:
         //     Two factor recovery codes
         public List<string> RecoveryCodes { get; set; }
-        
+
+        [DynamoDBProperty(typeof(DateTimeConverter))]
+        public override DateTime? LockoutEndDateUtc { get; set; }
+
         //
         // Summary:
         //     Returns the username for this user.
