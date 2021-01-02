@@ -25,6 +25,8 @@ namespace ara225.DynamoDBUserStore
             LoginProviderKeys = new List<string>();
             LoginProviderDisplayNames = new List<string>();
             AccessFailedCount = 0;
+            ClaimTypes = new List<string>();
+            ClaimValues = new List<string>();
         }
 
         //
@@ -95,6 +97,9 @@ namespace ara225.DynamoDBUserStore
 
         [DynamoDBProperty(typeof(DateTimeConverter))]
         public override DateTime? LockoutEndDateUtc { get; set; }
+
+        public List<string> ClaimTypes { get; set; }
+        public List<string> ClaimValues { get; set; }
 
         //
         // Summary:

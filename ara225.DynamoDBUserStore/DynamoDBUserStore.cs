@@ -30,48 +30,126 @@ namespace ara225.DynamoDBUserStore
 
         public Task<bool> GetTwoFactorEnabledAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.TwoFactorEnabled; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException(nameof(user));
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.TwoFactorEnabled; 
+            });
         }
 
         public Task SetTwoFactorEnabledAsync(DynamoDBUser user, bool enabled, CancellationToken cancellationToken)
         {
-             return Task.Run(() => { user.TwoFactorEnabled = enabled; });
+             return Task.Run(() => 
+             {
+                 if (user == null)
+                 {
+                     throw new ArgumentNullException();
+                 }
+
+                 cancellationToken.ThrowIfCancellationRequested();
+                 user.TwoFactorEnabled = enabled; 
+             });
         }
 
         public Task<string> GetAuthenticatorKeyAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.AuthenticatorKey; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.AuthenticatorKey; 
+            });
         }
 
         public Task SetAuthenticatorKeyAsync(DynamoDBUser user, string key, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.AuthenticatorKey = key; });
+            return Task.Run(() => 
+            {
+                if (key == null || user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.AuthenticatorKey = key; 
+            });
         }
 
         public Task<string> GetPhoneNumberAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.PhoneNumber; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.PhoneNumber; 
+            });
         }
 
         public Task<bool> GetPhoneNumberConfirmedAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.PhoneNumberConfirmed; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.PhoneNumberConfirmed; 
+            });
         }
 
         public Task SetPhoneNumberAsync(DynamoDBUser user, string phoneNumber, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.PhoneNumber = phoneNumber; });
+            return Task.Run(() => 
+            {
+                if (user == null || phoneNumber == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.PhoneNumber = phoneNumber; 
+            });
         }
 
         public Task SetPhoneNumberConfirmedAsync(DynamoDBUser user, bool confirmed, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.PhoneNumberConfirmed = confirmed; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.PhoneNumberConfirmed = confirmed; 
+            });
         }
 
         public Task AddLoginAsync(DynamoDBUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
+                if (user == null || login == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.LoginProviderDisplayNames.Add(login.ProviderDisplayName);
                 user.LoginProviderKeys.Add(login.ProviderKey);
                 user.LoginProviders.Add(login.LoginProvider);
@@ -143,23 +221,53 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<DynamoDBUser> FindByNameAsync(string NormalizedUserName, CancellationToken cancellationToken)
         {
+            if (NormalizedUserName == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetUserByAttribute("NormalizedUserName", NormalizedUserName);
         }
 
         public Task<string> GetEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.Email; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.Email; 
+            });
         }
 
         public Task<bool> GetEmailConfirmedAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.EmailConfirmed; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.EmailConfirmed; 
+            });
         }
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 IList<UserLoginInfo> UserLogins = new List<UserLoginInfo>();
                 for (int i = 0; i < user.LoginProviders.Count; i++)
                 {
@@ -171,33 +279,84 @@ namespace ara225.DynamoDBUserStore
 
         public Task<string> GetNormalizedEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.NormalizedEmail; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.NormalizedEmail; 
+            });
         }
 
         public Task<string> GetNormalizedUserNameAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.NormalizedUserName; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.NormalizedUserName; 
+            });
         }
 
         public Task<string> GetPasswordHashAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.PasswordHash; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.PasswordHash; 
+            });
         }
 
         public Task<string> GetUserIdAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.Id; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.Id; 
+            });
         }
 
         public Task<string> GetUserNameAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.UserName; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.UserName; 
+            });
         }
 
         public Task<bool> HasPasswordAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 if (user.PasswordHash == null || user.PasswordHash.Count() == 0)
                 {
                     return false;
@@ -213,6 +372,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null || loginProvider == null || providerKey == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 for (int i = 0; i < user.LoginProviderKeys.Count; i++)
                 {
@@ -229,28 +394,70 @@ namespace ara225.DynamoDBUserStore
 
         public Task SetEmailAsync(DynamoDBUser user, string email, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.Email = email; });
+            return Task.Run(() => 
+            {
+                if (user == null || email == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.Email = email; 
+            });
         }
 
         public Task SetEmailConfirmedAsync(DynamoDBUser user, bool confirmed, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.EmailConfirmed = confirmed; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.EmailConfirmed = confirmed; 
+            });
         }
 
         public Task SetNormalizedEmailAsync(DynamoDBUser user, string normalizedEmail, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.NormalizedEmail = normalizedEmail; });
+            return Task.Run(() => 
+            {
+                if (user == null || normalizedEmail == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.NormalizedEmail = normalizedEmail; 
+            });
         }
 
         public Task SetNormalizedUserNameAsync(DynamoDBUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.NormalizedUserName = normalizedName; });
+            return Task.Run(() => 
+            {
+                if (user == null || normalizedName == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.NormalizedUserName = normalizedName; 
+            });
         }
 
         public Task SetPasswordHashAsync(DynamoDBUser user, string passwordHash, CancellationToken cancellationToken)
         {
             return Task.Run(() => 
             {
+                if (user == null || passwordHash == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 user.PasswordHash = passwordHash;
             });
@@ -260,6 +467,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null || userName == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.UserName = userName;
                 user.NormalizedUserName = userName.ToUpper();
             });
@@ -267,6 +480,12 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> UpdateAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
             user.ConcurrencyStamp = Guid.NewGuid().ToString();
             IdentityResult Result = IdentityResult.Failed();
             bool UpdateResult = await _dataAccess.SaveItemToDB(user, cancellationToken);
@@ -281,19 +500,40 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null || recoveryCodes == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.RecoveryCodes = recoveryCodes.ToList();
             });
         }
 
         public Task<bool> RedeemCodeAsync(DynamoDBUser user, string code, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.RecoveryCodes.Remove(code); });
+            return Task.Run(() => 
+            {
+                if (user == null || code == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.RecoveryCodes.Remove(code); 
+            });
         }
 
         public Task<int> CountCodesAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 if (user.RecoveryCodes != null)
                 {
                     return user.RecoveryCodes.Count;
@@ -307,43 +547,124 @@ namespace ara225.DynamoDBUserStore
 
         public Task<IList<Claim>> GetClaimsAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                IList<Claim> Claims = new List<Claim>();
+                for (int i = 0; i < user.ClaimTypes.Count; i++)
+                {
+                    Claims.Append(new Claim(user.ClaimTypes[i], user.ClaimValues[i]));
+                }
+                return Claims;
+            });
         }
 
         public Task AddClaimsAsync(DynamoDBUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null || claims == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                foreach (Claim claim in claims)
+                {
+                    user.ClaimTypes.Add(claim.Type);
+                    user.ClaimValues.Add(claim.Value);
+                }
+            });
         }
 
         public Task ReplaceClaimAsync(DynamoDBUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null || claim == null || newClaim == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                RemoveClaimsAsync(user, new Claim[] { claim }, cancellationToken);
+                AddClaimsAsync(user, new Claim[] { claim }, cancellationToken);
+            });
         }
 
         public Task RemoveClaimsAsync(DynamoDBUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null || claims == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                foreach (Claim claim in claims)
+                {
+                    int index = user.ClaimTypes.IndexOf(claim.Type);
+                    user.ClaimTypes.Remove(claim.Type);
+                    user.ClaimValues.RemoveAt(index);
+                }
+            });
         }
 
-        public Task<IList<DynamoDBUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        public async Task<IList<DynamoDBUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (claim == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return await _dataAccess.GetUsersByClaim(claim);
         }
 
         public Task SetSecurityStampAsync(DynamoDBUser user, string stamp, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { user.SecurityStamp = stamp; });
+            return Task.Run(() => 
+            {
+                if (user == null || stamp == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.SecurityStamp = stamp; 
+            });
         }
 
         public Task<string> GetSecurityStampAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => { return user.SecurityStamp; });
+            return Task.Run(() => 
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.SecurityStamp; 
+            });
         }
 
         public Task<DateTimeOffset?> GetLockoutEndDateAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 DateTimeOffset? ReturnValue;
                 if (user.LockoutEndDateUtc == null)
                 {
@@ -361,6 +682,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
+                if (user == null || lockoutEnd == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 if (lockoutEnd == null)
                 {
                     return;
@@ -376,6 +703,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.AccessFailedCount = user.AccessFailedCount + 1;
                 return user.AccessFailedCount;
             });
@@ -385,6 +718,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.AccessFailedCount = 0;
             });
         }
@@ -393,6 +732,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 return user.AccessFailedCount;
             });
         }
@@ -401,6 +746,12 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 return user.LockoutEnabled;
             });
         }
@@ -409,12 +760,24 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 user.LockoutEnabled = enabled;
             });
         }
 
         public Task AddToRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
         {
+            if (user == null || roleName == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
         }
 

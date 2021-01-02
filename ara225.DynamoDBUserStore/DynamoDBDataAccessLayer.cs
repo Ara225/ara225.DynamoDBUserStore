@@ -7,6 +7,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using System.Threading;
 using Amazon.DynamoDBv2.DocumentModel;
+using System.Security.Claims;
 
 namespace ara225.DynamoDBUserStore
 {
@@ -60,6 +61,19 @@ namespace ara225.DynamoDBUserStore
             );
             List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
             return UsersList.FirstOrDefault();
+        }
+
+        public async Task<List<DynamoDBUser>> GetUsersByClaim(Claim claim)
+        {
+            List<ScanCondition> ConditionList = new List<ScanCondition>();
+            ConditionList.Add(new ScanCondition("ClaimTypes", ScanOperator.Contains, claim.Type));
+            ConditionList.Add(new ScanCondition("ClaimValues", ScanOperator.Contains, claim.Value));
+
+            AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
+                ConditionList
+            );
+            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
+            return UsersList;
         }
     }
 }
