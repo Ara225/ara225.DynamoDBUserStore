@@ -75,5 +75,17 @@ namespace ara225.DynamoDBUserStore
             List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
             return UsersList;
         }
+
+        public async Task<List<DynamoDBUser>> GetUsersByRole(string roleName)
+        {
+            List<ScanCondition> ConditionList = new List<ScanCondition>();
+            ConditionList.Add(new ScanCondition("Roles", ScanOperator.Contains, roleName));
+
+            AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
+                ConditionList
+            );
+            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
+            return UsersList;
+        }
     }
 }

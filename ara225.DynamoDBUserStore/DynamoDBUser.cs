@@ -87,11 +87,6 @@ namespace ara225.DynamoDBUserStore
 
         //
         // Summary:
-        //     URL to profile image
-        public string ProfileImageURL { get; set; }
-
-        //
-        // Summary:
         //     Two factor recovery codes
         public List<string> RecoveryCodes { get; set; }
 
@@ -100,6 +95,8 @@ namespace ara225.DynamoDBUserStore
 
         public List<string> ClaimTypes { get; set; }
         public List<string> ClaimValues { get; set; }
+
+        public new List<string> Roles { get; set; }
 
         //
         // Summary:

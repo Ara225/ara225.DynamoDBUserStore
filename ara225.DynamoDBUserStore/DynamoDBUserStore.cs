@@ -772,33 +772,70 @@ namespace ara225.DynamoDBUserStore
 
         public Task AddToRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
         {
-            if (user == null || roleName == null)
+            return Task.Run(() =>
             {
-                throw new ArgumentNullException();
-            }
+                if (user == null || roleName == null)
+                {
+                    throw new ArgumentNullException();
+                }
 
-            cancellationToken.ThrowIfCancellationRequested();
-            throw new NotImplementedException();
+                cancellationToken.ThrowIfCancellationRequested();
+                if (user.Roles.Any(item => { return item == roleName; }))
+                {
+                    return;
+                }
+                else
+                {
+                    user.Roles.Add(roleName);
+                }
+            });
         }
 
         public Task RemoveFromRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null || roleName == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                user.Roles.Remove(roleName);
+            });
         }
 
         public Task<IList<string>> GetRolesAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return (IList<string>)user.Roles;
+            });
         }
 
         public Task<bool> IsInRoleAsync(DynamoDBUser user, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (user == null || roleName == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return user.Roles.Contains(roleName);
+            });
         }
 
-        public Task<IList<DynamoDBUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        public async Task<IList<DynamoDBUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dataAccess.GetUsersByRole(roleName);
         }
     }
 }
