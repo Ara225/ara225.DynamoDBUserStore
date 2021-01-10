@@ -34,23 +34,23 @@ namespace ara225.DynamoDBUserStore
             return true;
         }
 
-        public async Task<DynamoDBUser> GetUserById(string Id)
+        public async Task<DynamoDBUser> GetUserById(string Id, CancellationToken cancellationToken)
         {
-            return await _context.LoadAsync<DynamoDBUser>(Id);
+            return await _context.LoadAsync<DynamoDBUser>(Id, cancellationToken);
         }
 
-        public async Task<DynamoDBUser> GetUserByAttribute(string Key, string ExpectedValue)
+        public async Task<DynamoDBUser> GetUserByAttribute(string Key, string ExpectedValue, CancellationToken cancellationToken)
         {
             List<ScanCondition> ConditionList = new List<ScanCondition>();
             ConditionList.Add(new ScanCondition(Key, ScanOperator.Equal, ExpectedValue));
             AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
                 ConditionList
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
+            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
 			return UsersList.FirstOrDefault();
         }
 
-        public async Task<DynamoDBUser> GetUserByLogin(string loginProvider, string providerKey)
+        public async Task<DynamoDBUser> GetUserByLogin(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             List<ScanCondition> ConditionList = new List<ScanCondition>();
             ConditionList.Add(new ScanCondition("LoginProviders", ScanOperator.Contains, loginProvider));
@@ -59,11 +59,11 @@ namespace ara225.DynamoDBUserStore
             AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
                 ConditionList
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
+            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
             return UsersList.FirstOrDefault();
         }
 
-        public async Task<List<DynamoDBUser>> GetUsersByClaim(Claim claim)
+        public async Task<List<DynamoDBUser>> GetUsersByClaim(Claim claim, CancellationToken cancellationToken)
         {
             List<ScanCondition> ConditionList = new List<ScanCondition>();
             ConditionList.Add(new ScanCondition("ClaimTypes", ScanOperator.Contains, claim.Type));
@@ -72,11 +72,11 @@ namespace ara225.DynamoDBUserStore
             AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
                 ConditionList
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
+            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
             return UsersList;
         }
 
-        public async Task<List<DynamoDBUser>> GetUsersByRole(string roleName)
+        public async Task<List<DynamoDBUser>> GetUsersByRole(string roleName, CancellationToken cancellationToken)
         {
             List<ScanCondition> ConditionList = new List<ScanCondition>();
             ConditionList.Add(new ScanCondition("Roles", ScanOperator.Contains, roleName));
@@ -84,8 +84,25 @@ namespace ara225.DynamoDBUserStore
             AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
                 ConditionList
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync();
+            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
             return UsersList;
         }
+
+        public async Task<DynamoDBRole> GetRoleById(string Id, CancellationToken cancellationToken)
+        {
+            return await _context.LoadAsync<DynamoDBRole>(Id, cancellationToken);
+        }
+
+        public async Task<DynamoDBRole> GetRoleByName(string NormalizedName, CancellationToken cancellationToken)
+        {
+            List<ScanCondition> ConditionList = new List<ScanCondition>();
+            ConditionList.Add(new ScanCondition("NormalizedName", ScanOperator.Equal, NormalizedName));
+            AsyncSearch<DynamoDBRole> Roles = _context.ScanAsync<DynamoDBRole>(
+                ConditionList
+            );
+            List<DynamoDBRole> RolesList = await Roles.GetRemainingAsync(cancellationToken);
+            return RolesList.FirstOrDefault();
+        }
+
     }
 }

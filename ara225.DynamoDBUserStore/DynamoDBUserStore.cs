@@ -34,7 +34,7 @@ namespace ara225.DynamoDBUserStore
             {
                 if (user == null)
                 {
-                    throw new ArgumentNullException(nameof(user));
+                    throw new ArgumentNullException();
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -194,7 +194,7 @@ namespace ara225.DynamoDBUserStore
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await _dataAccess.GetUserByAttribute("NormalizedEmail", NormalizedEmail);
+            return await _dataAccess.GetUserByAttribute("NormalizedEmail", NormalizedEmail, cancellationToken);
         }
 
         public async Task<DynamoDBUser> FindByIdAsync(string Id, CancellationToken cancellationToken)
@@ -205,7 +205,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return await _dataAccess.GetUserById(Id);
+            return await _dataAccess.GetUserById(Id, cancellationToken);
         }
 
         public async Task<DynamoDBUser> FindByLoginAsync(string LoginProvider, string ProviderKey, CancellationToken cancellationToken)
@@ -216,7 +216,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return await _dataAccess.GetUserByLogin(LoginProvider, ProviderKey);
+            return await _dataAccess.GetUserByLogin(LoginProvider, ProviderKey, cancellationToken);
         }
 
         public async Task<DynamoDBUser> FindByNameAsync(string NormalizedUserName, CancellationToken cancellationToken)
@@ -227,7 +227,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return await _dataAccess.GetUserByAttribute("NormalizedUserName", NormalizedUserName);
+            return await _dataAccess.GetUserByAttribute("NormalizedUserName", NormalizedUserName, cancellationToken);
         }
 
         public Task<string> GetEmailAsync(DynamoDBUser user, CancellationToken cancellationToken)
@@ -624,7 +624,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return await _dataAccess.GetUsersByClaim(claim);
+            return await _dataAccess.GetUsersByClaim(claim, cancellationToken);
         }
 
         public Task SetSecurityStampAsync(DynamoDBUser user, string stamp, CancellationToken cancellationToken)
@@ -835,7 +835,7 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IList<DynamoDBUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
-            return await _dataAccess.GetUsersByRole(roleName);
+            return await _dataAccess.GetUsersByRole(roleName, cancellationToken);
         }
     }
 }
