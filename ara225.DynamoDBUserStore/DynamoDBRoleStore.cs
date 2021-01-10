@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
-    public class DynamoDBRoleStore : IRoleStore<DynamoDBRole>, IRoleClaimStore<DynamoDBRole>|
+    public class DynamoDBRoleStore : IRoleStore<DynamoDBRole>, IRoleClaimStore<DynamoDBRole>
     {
         private DynamoDBDataAccessLayer _dataAccess;
         public DynamoDBRoleStore(DynamoDBDataAccessLayer da)
@@ -18,72 +18,184 @@ namespace ara225.DynamoDBUserStore
 
         public Task AddClaimAsync(DynamoDBRole role, Claim claim, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null || claim == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                role.ClaimTypes.Add(claim.Type);
+                role.ClaimValues.Add(claim.Value);
+            });
         }
 
-        public Task<IdentityResult> CreateAsync(DynamoDBRole role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> CreateAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (role == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await _dataAccess.SaveItemToDB(role, cancellationToken);
+            return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> DeleteAsync(DynamoDBRole role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (role == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await _dataAccess.DeleteItem(role, cancellationToken);
+            return IdentityResult.Success;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
-        public Task<DynamoDBRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
+        public async Task<DynamoDBRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (roleId == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return await _dataAccess.GetRoleById(roleId, cancellationToken);
         }
 
-        public Task<DynamoDBRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+        public async Task<DynamoDBRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (normalizedRoleName == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return await _dataAccess.GetRoleByName(normalizedRoleName, cancellationToken);
         }
 
         public Task<IList<Claim>> GetClaimsAsync(DynamoDBRole role, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                IList<Claim> Claims = new List<Claim>();
+                for (int i = 0; i < role.ClaimTypes.Count; i++)
+                {
+                    Claims.Append(new Claim(role.ClaimTypes[i], role.ClaimValues[i]));
+                }
+                return Claims;
+            });
         }
 
         public Task<string> GetNormalizedRoleNameAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return role.NormalizedName;
+            });
         }
 
         public Task<string> GetRoleIdAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return role.Id;
+            });
         }
 
         public Task<string> GetRoleNameAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                return role.Name;
+            });
         }
 
         public Task RemoveClaimAsync(DynamoDBRole role, Claim claim, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null || claim == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                int index = role.ClaimTypes.IndexOf(claim.Type);
+                role.ClaimTypes.Remove(claim.Type);
+                role.ClaimValues.RemoveAt(index);
+            });
         }
 
         public Task SetNormalizedRoleNameAsync(DynamoDBRole role, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null || normalizedName == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                role.NormalizedName = normalizedName;
+            });
         }
 
         public Task SetRoleNameAsync(DynamoDBRole role, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (role == null || roleName == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+                role.Name = roleName;
+            });
         }
 
-        public Task<IdentityResult> UpdateAsync(DynamoDBRole role, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (role == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await _dataAccess.SaveItemToDB(role, cancellationToken);
+            return IdentityResult.Success;
         }
     }
 }
