@@ -39,7 +39,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            await _dataAccess.SaveItemToDB(role, cancellationToken);
+            await _dataAccess.SaveRoleToDB(role, cancellationToken);
             return IdentityResult.Success;
         }
 
@@ -51,7 +51,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            await _dataAccess.DeleteItem(role, cancellationToken);
+            await _dataAccess.DeleteRole(role, cancellationToken);
             return IdentityResult.Success;
         }
 
@@ -194,7 +194,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            await _dataAccess.SaveItemToDB(role, cancellationToken);
+            await _dataAccess.SaveRoleToDB(role, cancellationToken);
             return IdentityResult.Success;
         }
     }

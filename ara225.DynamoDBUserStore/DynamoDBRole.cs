@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
-    [DynamoDBTable("DevProjRolesTable")]
+    [DynamoDBTable(Defaults.DefaultRolesTableName)]
     public class DynamoDBRole 
     {
         //

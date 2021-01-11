@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
-    [DynamoDBTable("DevProjUsersTable")]
+    [DynamoDBTable(Defaults.DefaultUsersTableName)]
     public class DynamoDBUser : IdentityUser
     {
         //

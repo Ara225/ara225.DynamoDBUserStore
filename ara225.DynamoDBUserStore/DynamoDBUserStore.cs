@@ -164,7 +164,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            await _dataAccess.SaveItemToDB(user, cancellationToken);
+            await _dataAccess.SaveUserToDB(user, cancellationToken);
             return IdentityResult.Success;
         }
 
@@ -176,7 +176,7 @@ namespace ara225.DynamoDBUserStore
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            await _dataAccess.DeleteItem(user, cancellationToken);
+            await _dataAccess.DeleteUser(user, cancellationToken);
             return IdentityResult.Success;
         }
 
@@ -484,11 +484,10 @@ namespace ara225.DynamoDBUserStore
             {
                 throw new ArgumentNullException();
             }
-
             cancellationToken.ThrowIfCancellationRequested();
             user.ConcurrencyStamp = Guid.NewGuid().ToString();
             IdentityResult Result = IdentityResult.Failed();
-            bool UpdateResult = await _dataAccess.SaveItemToDB(user, cancellationToken);
+            bool UpdateResult = await _dataAccess.SaveUserToDB(user, cancellationToken);
             if (UpdateResult)
             {
                 Result = IdentityResult.Success;

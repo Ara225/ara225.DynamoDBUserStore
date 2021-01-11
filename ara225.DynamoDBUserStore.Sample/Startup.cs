@@ -20,7 +20,7 @@ namespace ara225.DynamoDBUserStore.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             // Add DynamoDB user store
-            services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient()));
+            services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
             services.AddDefaultIdentity<DynamoDBUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddUserStore<DynamoDBUserStore>();
             services.AddControllersWithViews();
