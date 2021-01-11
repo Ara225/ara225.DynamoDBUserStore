@@ -17,7 +17,7 @@ namespace DevProjUnitTests
         [AssemblyInitialize]
         public static void Initialize(TestContext Context)
         {
-            _store = new DynamoDBUserStore(new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient()));
+            _store = new DynamoDBUserStore(new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
             _user = new DynamoDBUser("TestUser");
             _user.Email = "user@example.com";
             _user.NormalizedEmail = "USER@EXAMPLE.COM";
