@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ara225.DynamoDBUserStore", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{C0A67C2B-CE36-4B65-A2D2-3B404958FBDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ara225.DynamoDBUserStore.Tests", "ara225.DynamoDBUserStore.Tests\ara225.DynamoDBUserStore.Tests.csproj", "{A2F5A066-C922-4315-A1A6-F4FC1DDAE051}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ara225.DynamoDBUserStore.Sample", "ara225.DynamoDBUserStore.Sample\ara225.DynamoDBUserStore.Sample.csproj", "{FE094064-C154-43A5-9B6F-32DE08E2E372}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ara225.DynamoDBUserStore.Sample", "ara225.DynamoDBUserStore.Sample\ara225.DynamoDBUserStore.Sample.csproj", "{FE094064-C154-43A5-9B6F-32DE08E2E372}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		{C6E386C0-43BB-4098-9654-AB19DE994D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6E386C0-43BB-4098-9654-AB19DE994D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6E386C0-43BB-4098-9654-AB19DE994D60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A2F5A066-C922-4315-A1A6-F4FC1DDAE051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2F5A066-C922-4315-A1A6-F4FC1DDAE051}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2F5A066-C922-4315-A1A6-F4FC1DDAE051}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2F5A066-C922-4315-A1A6-F4FC1DDAE051}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE094064-C154-43A5-9B6F-32DE08E2E372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE094064-C154-43A5-9B6F-32DE08E2E372}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE094064-C154-43A5-9B6F-32DE08E2E372}.Release|Any CPU.ActiveCfg = Release|Any CPU
