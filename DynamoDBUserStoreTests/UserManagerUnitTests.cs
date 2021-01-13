@@ -12,7 +12,7 @@ namespace DynamoDBUserStoreTests
     {
         protected override object CreateTestContext()
         {
-            return new DynamoDBUserStore<DynamoDBUser>(new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
+            return new object();
         }
 
         protected override void AddUserStore(IServiceCollection services, object context = null)
