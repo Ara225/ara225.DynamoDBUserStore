@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
-    public class DynamoDBRoleStore : IRoleStore<DynamoDBRole>, IRoleClaimStore<DynamoDBRole>
+    public class DynamoDBRoleStore<TRole> : 
+        IRoleStore<DynamoDBRole>, 
+        IRoleClaimStore<DynamoDBRole>
+        where TRole : DynamoDBRole
     {
         private DynamoDBDataAccessLayer _dataAccess;
         public DynamoDBRoleStore(DynamoDBDataAccessLayer da)

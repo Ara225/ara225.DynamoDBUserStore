@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
-    public class DynamoDBUserStore : 
+    public class DynamoDBUserStore<TUser> : 
         IUserTwoFactorRecoveryCodeStore<DynamoDBUser>, 
         IUserTwoFactorStore<DynamoDBUser>, 
         IUserAuthenticatorKeyStore<DynamoDBUser>, 
@@ -21,6 +21,7 @@ namespace ara225.DynamoDBUserStore
         IUserLockoutStore<DynamoDBUser>,
         IUserRoleStore<DynamoDBUser>,
         IUserStore<DynamoDBUser>
+        where TUser : DynamoDBUser
     {
         private DynamoDBDataAccessLayer _dataAccess;
         public DynamoDBUserStore(DynamoDBDataAccessLayer da)
@@ -664,16 +665,8 @@ namespace ara225.DynamoDBUserStore
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                DateTimeOffset? ReturnValue;
-                if (user.LockoutEndDateUtc == null)
-                {
-                    ReturnValue = null;
-                }
-                else
-                {
-                    ReturnValue = DateTimeOffset.Parse(user.LockoutEndDateUtc.ToString());
-                }
-                return ReturnValue;
+  
+                return (DateTimeOffset?)user.LockoutEnd;
             });
         }
 
@@ -687,14 +680,8 @@ namespace ara225.DynamoDBUserStore
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                if (lockoutEnd == null)
-                {
-                    return;
-                }
-                else
-                {
-                    user.LockoutEndDateUtc = lockoutEnd.Value.UtcDateTime;
-                }
+                
+                user.LockoutEnd = lockoutEnd.Value;
             });
         }
 
