@@ -26,6 +26,7 @@ namespace ara225.DynamoDBUserStore
             AccessFailedCount = 0;
             ClaimTypes = new List<string>();
             ClaimValues = new List<string>();
+            Roles = new List<string>();
             LockoutEnd = DateTimeOffset.MinValue;
         }
 
