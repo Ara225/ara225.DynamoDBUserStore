@@ -3,7 +3,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +26,7 @@ namespace ara225.DynamoDBUserStore
             AccessFailedCount = 0;
             ClaimTypes = new List<string>();
             ClaimValues = new List<string>();
+            LockoutEnd = DateTimeOffset.MinValue;
         }
 
         //
@@ -90,8 +90,17 @@ namespace ara225.DynamoDBUserStore
         //     Two factor recovery codes
         public List<string> RecoveryCodes { get; set; }
 
+        [DynamoDBProperty(typeof(DateTimeOffsetConverter))]
+        public DateTimeOffset LockoutEnd { get; set; }
+
         [DynamoDBProperty(typeof(DateTimeConverter))]
         public override DateTime? LockoutEndDateUtc { get; set; }
+
+        [DynamoDBIgnore]
+        public override ICollection<IdentityUserClaim> Claims { get; }
+
+        [DynamoDBIgnore]
+        public override ICollection<IdentityUserLogin> Logins { get; }
 
         public List<string> ClaimTypes { get; set; }
         public List<string> ClaimValues { get; set; }
