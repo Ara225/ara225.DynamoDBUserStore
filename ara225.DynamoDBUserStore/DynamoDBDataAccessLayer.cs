@@ -29,7 +29,11 @@ namespace ara225.DynamoDBUserStore
                 _roleStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBRolesTableName }; 
             }
             _client = Client;
-            _context = new DynamoDBContext(Client); 
+            DynamoDBContextConfig Config = new DynamoDBContextConfig
+            {
+                Conversion = DynamoDBEntryConversion.V2
+            };
+            _context = new DynamoDBContext(Client, Config); 
         }
 
         public async Task<bool> SaveUserToDB(DynamoDBUser User, CancellationToken cancellationToken)
