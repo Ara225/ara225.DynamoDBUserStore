@@ -23,11 +23,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null || claim == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 role.ClaimTypes.Add(claim.Type);
                 role.ClaimValues.Add(claim.Value);
@@ -36,11 +31,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> CreateAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            if (role == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             await _dataAccess.SaveRoleToDB(role, cancellationToken);
             return IdentityResult.Success;
@@ -48,11 +38,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> DeleteAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            if (role == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             await _dataAccess.DeleteRole(role, cancellationToken);
             return IdentityResult.Success;
@@ -64,22 +49,12 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<DynamoDBRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
-            if (roleId == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetRoleById(roleId, cancellationToken);
         }
 
         public async Task<DynamoDBRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            if (normalizedRoleName == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetRoleByName(normalizedRoleName, cancellationToken);
         }
@@ -88,11 +63,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 IList<Claim> Claims = new List<Claim>();
                 for (int i = 0; i < role.ClaimTypes.Count; i++)
@@ -107,11 +77,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return role.NormalizedName;
             });
@@ -121,11 +86,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return role.Id;
             });
@@ -135,11 +95,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return role.Name;
             });
@@ -149,11 +104,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null || claim == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 int index = role.ClaimTypes.IndexOf(claim.Type);
                 role.ClaimTypes.Remove(claim.Type);
@@ -165,11 +115,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null || normalizedName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 role.NormalizedName = normalizedName;
             });
@@ -179,11 +124,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (role == null || roleName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 role.Name = roleName;
             });
@@ -191,11 +131,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> UpdateAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            if (role == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             await _dataAccess.SaveRoleToDB(role, cancellationToken);
             return IdentityResult.Success;
