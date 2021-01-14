@@ -22,11 +22,11 @@ namespace ara225.DynamoDBUserStore
         {
             if (DynamoDBUsersTableName != null)
             {
-                _userStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBUsersTableName };
+                _userStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBUsersTableName, Conversion = DynamoDBEntryConversion.V2 };
             }
             if (DynamoDBRolesTableName != null)
             {
-                _roleStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBRolesTableName }; 
+                _roleStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBRolesTableName, Conversion = DynamoDBEntryConversion.V2 }; 
             }
             _client = Client;
             DynamoDBContextConfig Config = new DynamoDBContextConfig
