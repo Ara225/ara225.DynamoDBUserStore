@@ -20,7 +20,8 @@ namespace ara225.DynamoDBUserStore
         IUserSecurityStampStore<DynamoDBUser>,
         IUserLockoutStore<DynamoDBUser>,
         IUserRoleStore<DynamoDBUser>,
-        IUserStore<DynamoDBUser>
+        IUserStore<DynamoDBUser>,
+        IUserAuthenticationTokenStore<DynamoDBUser>
         where TUser : DynamoDBUser
     {
         private DynamoDBDataAccessLayer _dataAccess;
@@ -557,6 +558,21 @@ namespace ara225.DynamoDBUserStore
         public async Task<IList<DynamoDBUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
             return await _dataAccess.GetUsersByRole(roleName, cancellationToken);
+        }
+
+        public Task SetTokenAsync(DynamoDBUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveTokenAsync(DynamoDBUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetTokenAsync(DynamoDBUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
