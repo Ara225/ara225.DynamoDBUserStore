@@ -33,11 +33,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.TwoFactorEnabled; 
             });
@@ -47,11 +42,6 @@ namespace ara225.DynamoDBUserStore
         {
              return Task.Run(() => 
              {
-                 if (user == null)
-                 {
-                     throw new ArgumentNullException();
-                 }
-
                  cancellationToken.ThrowIfCancellationRequested();
                  user.TwoFactorEnabled = enabled; 
              });
@@ -61,11 +51,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.AuthenticatorKey; 
             });
@@ -75,11 +60,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (key == null || user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.AuthenticatorKey = key; 
             });
@@ -89,11 +69,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.PhoneNumber; 
             });
@@ -103,11 +78,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.PhoneNumberConfirmed; 
             });
@@ -117,11 +87,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || phoneNumber == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.PhoneNumber = phoneNumber; 
             });
@@ -131,11 +96,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.PhoneNumberConfirmed = confirmed; 
             });
@@ -145,11 +105,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || login == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.LoginProviderDisplayNames.Add(login.ProviderDisplayName);
                 user.LoginProviderKeys.Add(login.ProviderKey);
@@ -159,11 +114,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> CreateAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             await _dataAccess.SaveUserToDB(user, cancellationToken);
             return IdentityResult.Success;
@@ -171,11 +121,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> DeleteAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             await _dataAccess.DeleteUser(user, cancellationToken);
             return IdentityResult.Success;
@@ -188,45 +133,24 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<DynamoDBUser> FindByEmailAsync(string NormalizedEmail, CancellationToken cancellationToken)
         {
-            if (NormalizedEmail == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
-
             return await _dataAccess.GetUserByAttribute("NormalizedEmail", NormalizedEmail, cancellationToken);
         }
 
         public async Task<DynamoDBUser> FindByIdAsync(string Id, CancellationToken cancellationToken)
         {
-            if (Id == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetUserById(Id, cancellationToken);
         }
 
         public async Task<DynamoDBUser> FindByLoginAsync(string LoginProvider, string ProviderKey, CancellationToken cancellationToken)
         {
-            if (LoginProvider == null || ProviderKey == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetUserByLogin(LoginProvider, ProviderKey, cancellationToken);
         }
 
         public async Task<DynamoDBUser> FindByNameAsync(string NormalizedUserName, CancellationToken cancellationToken)
         {
-            if (NormalizedUserName == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetUserByAttribute("NormalizedUserName", NormalizedUserName, cancellationToken);
         }
@@ -235,11 +159,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.Email; 
             });
@@ -249,11 +168,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.EmailConfirmed; 
             });
@@ -263,11 +177,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 IList<UserLoginInfo> UserLogins = new List<UserLoginInfo>();
                 for (int i = 0; i < user.LoginProviders.Count; i++)
@@ -282,11 +191,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.NormalizedEmail; 
             });
@@ -296,11 +200,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.NormalizedUserName; 
             });
@@ -310,11 +209,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.PasswordHash; 
             });
@@ -324,11 +218,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.Id; 
             });
@@ -338,11 +227,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.UserName; 
             });
@@ -352,11 +236,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 if (user.PasswordHash == null || user.PasswordHash.Count() == 0)
                 {
@@ -373,11 +252,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || loginProvider == null || providerKey == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 for (int i = 0; i < user.LoginProviderKeys.Count; i++)
@@ -397,11 +271,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || email == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.Email = email; 
             });
@@ -411,11 +280,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.EmailConfirmed = confirmed; 
             });
@@ -425,11 +289,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || normalizedEmail == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.NormalizedEmail = normalizedEmail; 
             });
@@ -439,11 +298,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || normalizedName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.NormalizedUserName = normalizedName; 
             });
@@ -453,11 +307,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || passwordHash == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.SecurityStamp = Guid.NewGuid().ToString();
                 user.PasswordHash = passwordHash;
@@ -468,11 +317,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || userName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.UserName = userName;
                 user.NormalizedUserName = userName.ToUpper();
@@ -481,10 +325,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IdentityResult> UpdateAsync(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException();
-            }
             cancellationToken.ThrowIfCancellationRequested();
             user.ConcurrencyStamp = Guid.NewGuid().ToString();
             IdentityResult Result = IdentityResult.Failed();
@@ -500,11 +340,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || recoveryCodes == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.RecoveryCodes = recoveryCodes.ToList();
             });
@@ -514,11 +349,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || code == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.RecoveryCodes.Remove(code); 
             });
@@ -528,11 +358,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 if (user.RecoveryCodes != null)
                 {
@@ -549,11 +374,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 IList<Claim> Claims = new List<Claim>();
                 for (int i = 0; i < user.ClaimTypes.Count; i++)
@@ -568,11 +388,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || claims == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 foreach (Claim claim in claims)
                 {
@@ -586,11 +401,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || claim == null || newClaim == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 RemoveClaimsAsync(user, new Claim[] { claim }, cancellationToken);
                 AddClaimsAsync(user, new Claim[] { claim }, cancellationToken);
@@ -601,11 +411,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || claims == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 foreach (Claim claim in claims)
                 {
@@ -618,11 +423,6 @@ namespace ara225.DynamoDBUserStore
 
         public async Task<IList<DynamoDBUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
-            if (claim == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
             return await _dataAccess.GetUsersByClaim(claim, cancellationToken);
         }
@@ -631,11 +431,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || stamp == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.SecurityStamp = stamp; 
             });
@@ -645,11 +440,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.SecurityStamp; 
             });
@@ -659,11 +449,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
   
                 return (DateTimeOffset?)user.LockoutEnd;
@@ -674,11 +459,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null || lockoutEnd == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 
                 user.LockoutEnd = lockoutEnd.Value;
@@ -689,11 +469,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() => 
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.AccessFailedCount = user.AccessFailedCount + 1;
                 return user.AccessFailedCount;
@@ -704,11 +479,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.AccessFailedCount = 0;
             });
@@ -718,11 +488,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.AccessFailedCount;
             });
@@ -732,11 +497,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.LockoutEnabled;
             });
@@ -746,11 +506,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.LockoutEnabled = enabled;
             });
@@ -760,11 +515,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || roleName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 if (user.Roles.Any(item => { return item == roleName; }))
                 {
@@ -781,11 +531,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || roleName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 user.Roles.Remove(roleName);
             });
@@ -795,11 +540,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return (IList<string>)user.Roles;
             });
@@ -809,11 +549,6 @@ namespace ara225.DynamoDBUserStore
         {
             return Task.Run(() =>
             {
-                if (user == null || roleName == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
                 cancellationToken.ThrowIfCancellationRequested();
                 return user.Roles.Contains(roleName);
             });
