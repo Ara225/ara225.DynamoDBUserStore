@@ -107,6 +107,13 @@ namespace ara225.DynamoDBUserStore
             return Task.Run(() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                for (int i = 0; i < user.LoginProviders.Count; i++)
+                {
+                    if (user.LoginProviders[i] == login.LoginProvider && user.LoginProviderKeys[i] == login.ProviderKey && user.LoginProviderDisplayNames[i] == login.LoginProvider)
+                    {
+                        return;
+                    }
+                }
                 user.LoginProviderDisplayNames.Add(login.ProviderDisplayName);
                 user.LoginProviderKeys.Add(login.ProviderKey);
                 user.LoginProviders.Add(login.LoginProvider);
