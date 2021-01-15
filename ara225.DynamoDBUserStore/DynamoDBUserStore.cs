@@ -379,7 +379,7 @@ namespace ara225.DynamoDBUserStore
                 IList<Claim> Claims = new List<Claim>();
                 for (int i = 0; i < user.ClaimTypes.Count; i++)
                 {
-                    Claims.Append(new Claim(user.ClaimTypes[i], user.ClaimValues[i]));
+                    Claims.Add(new Claim(user.ClaimTypes[i], user.ClaimValues[i]));
                 }
                 return Claims;
             });
