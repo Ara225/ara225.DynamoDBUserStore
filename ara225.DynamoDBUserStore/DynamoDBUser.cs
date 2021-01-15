@@ -24,7 +24,7 @@ namespace ara225.DynamoDBUserStore
             ClaimTypes = new List<string>();
             ClaimValues = new List<string>();
             Roles = new List<string>();
-            LockoutEnd = DateTimeOffset.MinValue;
+            LockoutEnd = null;
         }
 
         //
@@ -89,7 +89,7 @@ namespace ara225.DynamoDBUserStore
         public List<string> RecoveryCodes { get; set; }
 
         [DynamoDBProperty(typeof(DateTimeOffsetConverter))]
-        public DateTimeOffset LockoutEnd { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
 
         [DynamoDBProperty(typeof(DateTimeConverter))]
         public override DateTime? LockoutEndDateUtc { get; set; }

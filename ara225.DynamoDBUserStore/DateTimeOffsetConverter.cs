@@ -8,12 +8,19 @@ namespace ara225.DynamoDBUserStore
 	{
 		public DynamoDBEntry ToEntry(object value)
 		{
-			return ((DateTimeOffset)value).ToString("o");
+			if (((DateTimeOffset?)value).HasValue)
+			{
+				return ((DateTimeOffset?)value).Value.ToString("o");
+			}
+			else
+            {
+				return null;
+            }
 		}
 
 		public object FromEntry(DynamoDBEntry entry)
 		{
-			return DateTimeOffset.ParseExact(entry.AsString(), "o", null);
+			return (DateTimeOffset?)DateTimeOffset.ParseExact(entry.AsString(), "o", null);
 		}
 	}
 }

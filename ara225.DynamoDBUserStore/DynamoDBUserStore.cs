@@ -468,8 +468,14 @@ namespace ara225.DynamoDBUserStore
             return Task.Run(() => 
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                
-                user.LockoutEnd = lockoutEnd.Value;
+                if (lockoutEnd.HasValue)
+                {
+                    user.LockoutEnd = lockoutEnd.Value;
+                }
+                else
+                {
+                    user.LockoutEnd = null;
+                }
             });
         }
 
