@@ -575,17 +575,54 @@ namespace ara225.DynamoDBUserStore
 
         public Task SetTokenAsync(DynamoDBUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                for (int i = 0; i < user.TokenValues.Count; i++)
+                {
+                    if (user.TokenLoginProviders[i] == loginProvider && user.TokenNames[i] == name)
+                    {
+                        user.TokenValues[i] = value;
+                        return;
+                    }
+                }
+                user.TokenLoginProviders.Add(loginProvider);
+                user.TokenNames.Add(name);
+                user.TokenValues.Add(value);
+            });
         }
 
         public Task RemoveTokenAsync(DynamoDBUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                for (int i = 0; i < user.TokenValues.Count; i++)
+                {
+                    if (user.TokenLoginProviders[i] == loginProvider && user.TokenNames[i] == name)
+                    {
+                        user.TokenLoginProviders.RemoveAt(i);
+                        user.TokenNames.RemoveAt(i);
+                        user.TokenValues.RemoveAt(i);
+                    }
+                }
+            });
         }
 
         public Task<string> GetTokenAsync(DynamoDBUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                for (int i = 0; i < user.TokenValues.Count; i++)
+                {
+                    if (user.TokenLoginProviders[i] == loginProvider && user.TokenNames[i] == name)
+                    {
+                        return user.TokenValues[i];
+                    }
+                }
+                return null;
+            });
         }
     }
 }

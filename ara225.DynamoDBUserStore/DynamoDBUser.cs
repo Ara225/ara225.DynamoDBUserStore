@@ -17,13 +17,7 @@ namespace ara225.DynamoDBUserStore
             Id = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
             ConcurrencyStamp = Guid.NewGuid().ToString();
-            LoginProviders = new List<string>();
-            LoginProviderKeys = new List<string>();
-            LoginProviderDisplayNames = new List<string>();
             AccessFailedCount = 0;
-            ClaimTypes = new List<string>();
-            ClaimValues = new List<string>();
-            Roles = new List<string>();
             LockoutEnd = null;
         }
 
@@ -71,22 +65,22 @@ namespace ara225.DynamoDBUserStore
         //
         // Summary:
         //     The login providers used by the current user
-        public List<string> LoginProviders { get; set; }
+        public List<string> LoginProviders { get; set; } = new List<string>();
 
         //
         // Summary:
         //     The login provider keys linked to the current user
-        public List<string> LoginProviderKeys { get; set; }
+        public List<string> LoginProviderKeys { get; set; } = new List<string>();
 
         //
         // Summary:
         //     The display name of the login providers used by the current user
-        public List<string> LoginProviderDisplayNames { get; set; }
+        public List<string> LoginProviderDisplayNames { get; set; } = new List<string>();
 
         //
         // Summary:
         //     Two factor recovery codes
-        public List<string> RecoveryCodes { get; set; }
+        public List<string> RecoveryCodes { get; set; } = new List<string>();
 
         [DynamoDBProperty(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset? LockoutEnd { get; set; }
@@ -100,9 +94,13 @@ namespace ara225.DynamoDBUserStore
         [DynamoDBIgnore]
         public override ICollection<IdentityUserLogin> Logins { get; }
 
-        public List<string> ClaimTypes { get; set; }
-        public List<string> ClaimValues { get; set; }
+        public List<string> ClaimTypes { get; set; } = new List<string>();
+        public List<string> ClaimValues { get; set; } = new List<string>();
 
-        public new List<string> Roles { get; set; }
+        public new List<string> Roles { get; set; } = new List<string>();
+
+        public List<string> TokenLoginProviders { get; set; } = new List<string>();
+        public List<string> TokenNames { get; set; } = new List<string>();
+        public List<string> TokenValues { get; set; } = new List<string>();
     }
 }
