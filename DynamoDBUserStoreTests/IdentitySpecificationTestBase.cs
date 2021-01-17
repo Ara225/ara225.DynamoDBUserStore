@@ -276,7 +276,8 @@ namespace DynamoDBUserStoreTests
             var role = CreateTestRole("FindByIdAsync");
             Assert.Null(await manager.FindByIdAsync(await manager.GetRoleIdAsync(role)));
             IdentityResultAssert.IsSuccess(await manager.CreateAsync(role));
-            Assert.Equal(role, await manager.FindByIdAsync(await manager.GetRoleIdAsync(role)));
+            // Change
+            Assert.Equal(role.ToString(), (await manager.FindByIdAsync(await manager.GetRoleIdAsync(role))).ToString());
         }
 
         /// <summary>
@@ -292,7 +293,8 @@ namespace DynamoDBUserStoreTests
             Assert.Null(await manager.FindByNameAsync(roleName));
             Assert.False(await manager.RoleExistsAsync(roleName));
             IdentityResultAssert.IsSuccess(await manager.CreateAsync(role));
-            Assert.Equal(role, await manager.FindByNameAsync(roleName));
+            // Change
+            Assert.Equal(role.ToString(), (await manager.FindByNameAsync(roleName)).ToString());
         }
 
         /// <summary>
@@ -311,7 +313,8 @@ namespace DynamoDBUserStoreTests
             IdentityResultAssert.IsSuccess(await manager.SetRoleNameAsync(role, "Changed"));
             IdentityResultAssert.IsSuccess(await manager.UpdateAsync(role));
             Assert.False(await manager.RoleExistsAsync("update"));
-            Assert.Equal(role, await manager.FindByNameAsync("Changed"));
+            // Change
+            Assert.Equal(role.ToString(), (await manager.FindByNameAsync("Changed")).ToString());
         }
 
         /// <summary>
@@ -412,7 +415,8 @@ namespace DynamoDBUserStoreTests
                 foreach (var r in roles)
                 {
                     var expectedRoleName = await roleManager.GetRoleNameAsync(r);
-                    Assert.Contains(rs, role => role == expectedRoleName);
+                    // Change
+                    Assert.Contains(rs, role => role == expectedRoleName.ToUpper());
                 }
             }
         }

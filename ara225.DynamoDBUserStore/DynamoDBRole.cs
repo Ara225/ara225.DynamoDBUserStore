@@ -51,14 +51,5 @@ namespace ara225.DynamoDBUserStore
 
         public List<string> ClaimTypes { get; set; } = new List<string>();
         public List<string> ClaimValues { get; set; } = new List<string>();
-
-
-        //
-        // Summary:
-        //     Returns the name for this role.
-        public override string ToString()
-        {
-            return Name;
-        }
     }
 }

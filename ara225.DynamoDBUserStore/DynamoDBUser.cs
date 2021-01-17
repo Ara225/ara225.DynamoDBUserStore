@@ -104,13 +104,5 @@ namespace ara225.DynamoDBUserStore
         public List<string> ClaimValues { get; set; }
 
         public new List<string> Roles { get; set; }
-
-        //
-        // Summary:
-        //     Returns the username for this user.
-        public override string ToString()
-        {
-            return UserName;
-        }
     }
 }

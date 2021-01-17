@@ -608,7 +608,8 @@ namespace DynamoDBUserStoreTests
             var logins = await manager.GetLoginsAsync(user);
             Assert.NotNull(logins);
             Assert.Single(logins);
-            Assert.Equal(user, await manager.FindByLoginAsync(login.LoginProvider, login.ProviderKey));
+            // Change
+            Assert.Equal(user.ToString(), (await manager.FindByLoginAsync(login.LoginProvider, login.ProviderKey)).ToString());
             Assert.True(await manager.CheckPasswordAsync(user, "password"));
         }
 
@@ -643,7 +644,8 @@ namespace DynamoDBUserStoreTests
             var login = new UserLoginInfo("Provider", userId, "display");
             IdentityResultAssert.IsSuccess(result);
             IdentityResultAssert.IsSuccess(await manager.AddLoginAsync(user, login));
-            Assert.Equal(user, await manager.FindByLoginAsync(login.LoginProvider, login.ProviderKey));
+            // Change
+            Assert.Equal(user.ToString(), (await manager.FindByLoginAsync(login.LoginProvider, login.ProviderKey)).ToString());
             var logins = await manager.GetLoginsAsync(user);
             Assert.NotNull(logins);
             Assert.Single(logins);
@@ -923,7 +925,8 @@ namespace DynamoDBUserStoreTests
             var user = CreateTestUser(email: email);
             IdentityResultAssert.IsSuccess(await manager.CreateAsync(user));
             var fetch = await manager.FindByEmailAsync(email);
-            Assert.Equal(user, fetch);
+            // Change
+            Assert.Equal(user.ToString(), fetch.ToString());
         }
 
         /// <summary>
