@@ -411,7 +411,7 @@ namespace ara225.DynamoDBUserStore
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 RemoveClaimsAsync(user, new Claim[] { claim }, cancellationToken);
-                AddClaimsAsync(user, new Claim[] { claim }, cancellationToken);
+                AddClaimsAsync(user, new Claim[] { newClaim }, cancellationToken);
             });
         }
 
