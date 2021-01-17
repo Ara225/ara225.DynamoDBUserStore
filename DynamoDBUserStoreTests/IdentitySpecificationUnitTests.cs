@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.Test;
 using ara225.DynamoDBUserStore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
+using Amazon.DynamoDBv2;
 
 namespace DynamoDBUserStoreTests
 {
@@ -17,7 +18,10 @@ namespace DynamoDBUserStoreTests
 
         protected override void AddRoleStore(IServiceCollection services, object context = null)
         {
-            services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
+            // To test with a local DynamoDB in Docker
+            services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new AmazonDynamoDBClient(new AmazonDynamoDBConfig { ServiceURL = "http://localhost:8000" }), "UserStoreTable", "RoleStoreTable"));
+            // To test with DynamoDB in the cloud
+            //services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
             services.AddIdentity<DynamoDBUser, DynamoDBRole>()
                 .AddUserStore<DynamoDBUserStore<DynamoDBUser>>()
                 .AddRoleStore<DynamoDBRoleStore<DynamoDBRole>>();
