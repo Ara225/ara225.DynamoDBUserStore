@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace DynamoDBUserStoreTests
 {
-    public class IdentitySpecificationUnitTests : IdentitySpecificationTestBase<DynamoDBUser, DynamoDBRole>
+    public class IdentitySpecificationUnitTests : DynamoDBUserStoreTests.IdentitySpecificationTestBase<DynamoDBUser, DynamoDBRole>
     {
 
         protected override object CreateTestContext()
