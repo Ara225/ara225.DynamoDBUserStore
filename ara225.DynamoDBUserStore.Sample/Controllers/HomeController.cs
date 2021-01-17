@@ -1,4 +1,5 @@
 ﻿using ara225.DynamoDBUserStore.Sample.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,7 +24,14 @@ namespace ara225.DynamoDBUserStore.Sample.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [Authorize]
+        public IActionResult Auth()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "DYNAMODBUSERSTORETESTROLE")]
+        public IActionResult RoleAuth()
         {
             return View();
         }

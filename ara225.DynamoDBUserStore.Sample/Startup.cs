@@ -1,9 +1,11 @@
 using ara225.DynamoDBUserStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore.Sample
 {
@@ -23,13 +25,33 @@ namespace ara225.DynamoDBUserStore.Sample
             services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
             services.AddDefaultIdentity<DynamoDBUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddUserStore<DynamoDBUserStore<DynamoDBUser>>()
+                .AddRoles<DynamoDBRole>()
                 .AddRoleStore<DynamoDBRoleStore<DynamoDBRole>>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
+        public async Task CreateTestUserAndRole(UserManager<DynamoDBUser> userManager, RoleManager<DynamoDBRole> roleManager)
+        {
+            if (await roleManager.FindByNameAsync("DynamoDBUserStoreTestRole") == null)
+            {        
+                DynamoDBRole role = new DynamoDBRole();
+                role.Name = "DynamoDBUserStoreTestRole";
+                await roleManager.CreateAsync(role);
+            }
+            if (await userManager.FindByNameAsync("user@example.com") == null)
+            {
+                DynamoDBUser user = new DynamoDBUser("user@example.com");
+                user.Email = "user@example.com";
+                user.EmailConfirmed = true;
+                await userManager.CreateAsync(user);
+                await userManager.AddPasswordAsync(user, "TestPassword123!");
+                await userManager.AddToRoleAsync(user, "DynamoDBUserStoreTestRole");
+            }
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<DynamoDBUser> userManager, RoleManager<DynamoDBRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -57,6 +79,7 @@ namespace ara225.DynamoDBUserStore.Sample
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            CreateTestUserAndRole(userManager, roleManager).Wait();
         }
     }
 }
