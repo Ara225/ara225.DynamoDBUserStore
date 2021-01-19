@@ -1,12 +1,6 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+ * Contains default names for the user and role tables
+ */
 
 namespace ara225.DynamoDBUserStore
 {

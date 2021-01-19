@@ -1,4 +1,8 @@
-﻿using System;
+﻿/**
+ * Converts DataTimeOffsets into strings for DynamoDB
+ */
+
+using System;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 

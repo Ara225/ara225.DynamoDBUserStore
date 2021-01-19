@@ -85,7 +85,7 @@ namespace ara225.DynamoDBUserStore
         [DynamoDBProperty(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset? LockoutEnd { get; set; }
 
-        [DynamoDBProperty(typeof(DateTimeConverter))]
+        [DynamoDBIgnore]
         public override DateTime? LockoutEndDateUtc { get; set; }
 
         [DynamoDBIgnore]

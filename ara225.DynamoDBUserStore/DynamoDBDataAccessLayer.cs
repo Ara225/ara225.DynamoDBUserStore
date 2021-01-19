@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Identity;
-using System;
+/**
+ * Code that actually accesses DynamoDB
+ */
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,118 +14,169 @@ namespace ara225.DynamoDBUserStore
 {
     public class DynamoDBDataAccessLayer
     {
-        private AmazonDynamoDBClient _client;
         private DynamoDBContext _context;
         private DynamoDBOperationConfig _userStoreDBConfig = new DynamoDBOperationConfig();
         private DynamoDBOperationConfig _roleStoreDBConfig = new DynamoDBOperationConfig();
 
-        public DynamoDBDataAccessLayer(AmazonDynamoDBClient Client, string DynamoDBUsersTableName, string DynamoDBRolesTableName)
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="client">An AmazonDynamoDBClient configured as required</param>
+        /// <param name="dynamoDBUsersTableName">String representing the name of the user storage table</param>
+        /// <param name="dynamoDBRolesTableName">String representing the name of the role storage table</param>
+        public DynamoDBDataAccessLayer(AmazonDynamoDBClient client, string dynamoDBUsersTableName, string dynamoDBRolesTableName)
         {
-            if (DynamoDBUsersTableName != null)
+            // Need to override table name so that we target the right table and to set the conversion to 
+            // V2. This ensures that DynamoDB converts lists and bools correctly into DyanmoDB lists and bools 
+            if (dynamoDBUsersTableName != null)
             {
-                _userStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBUsersTableName, Conversion = DynamoDBEntryConversion.V2 };
+                _userStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = dynamoDBUsersTableName, Conversion = DynamoDBEntryConversion.V2 };
             }
-            if (DynamoDBRolesTableName != null)
+            if (dynamoDBRolesTableName != null)
             {
-                _roleStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = DynamoDBRolesTableName, Conversion = DynamoDBEntryConversion.V2 }; 
+                _roleStoreDBConfig = new DynamoDBOperationConfig { OverrideTableName = dynamoDBRolesTableName, Conversion = DynamoDBEntryConversion.V2 }; 
             }
-            _client = Client;
+
             DynamoDBContextConfig Config = new DynamoDBContextConfig
             {
                 Conversion = DynamoDBEntryConversion.V2
             };
-            _context = new DynamoDBContext(Client, Config); 
+            _context = new DynamoDBContext(client, Config); 
         }
 
-        public async Task<bool> SaveUserToDB(DynamoDBUser User, CancellationToken cancellationToken)
+        /// <summary>
+        /// Save the user to a DynamoDB table. Works for updates and creation
+        /// </summary>
+        /// <param name="user">The user in question</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Bool indicating that the task completed</returns>
+        public async Task<bool> SaveUserToDB(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            await _context.SaveAsync(User, _userStoreDBConfig, cancellationToken);
+            await _context.SaveAsync(user, _userStoreDBConfig, cancellationToken);
             return true;
         }
 
-        public async Task<bool> SaveRoleToDB(DynamoDBRole Role, CancellationToken cancellationToken)
+        /// <summary>
+        /// Save a role to a DynamoDB table. Works for updates and creation
+        /// </summary>
+        /// <param name="role">The role in question</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Bool indicating that the task completed</returns>
+        public async Task<bool> SaveRoleToDB(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            await _context.SaveAsync(Role, _roleStoreDBConfig, cancellationToken);
+            await _context.SaveAsync(role, _roleStoreDBConfig, cancellationToken);
             return true;
         }
 
-        public async Task<bool> DeleteUser(DynamoDBUser User, CancellationToken cancellationToken)
+        /// <summary>
+        /// Deletes a user from a DynamoDB table.
+        /// </summary>
+        /// <param name="user">The user in question</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Bool indicating that the task completed</returns>
+        public async Task<bool> DeleteUser(DynamoDBUser user, CancellationToken cancellationToken)
         {
-            await _context.DeleteAsync(User, _userStoreDBConfig, cancellationToken);
+            await _context.DeleteAsync(user, _userStoreDBConfig, cancellationToken);
             return true;
         }
 
-        public async Task<bool> DeleteRole(DynamoDBRole Role, CancellationToken cancellationToken)
+        /// <summary>
+        /// Deletes a role from a DynamoDB table.
+        /// </summary>
+        /// <param name="role">The role in question</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Bool indicating that the task completed</returns>
+        public async Task<bool> DeleteRole(DynamoDBRole role, CancellationToken cancellationToken)
         {
-            await _context.DeleteAsync(Role, _roleStoreDBConfig, cancellationToken);
+            await _context.DeleteAsync(role, _roleStoreDBConfig, cancellationToken);
             return true;
         }
 
-        public async Task<DynamoDBUser> GetUserById(string Id, CancellationToken cancellationToken)
+        /// <summary>
+        /// Retrieve a single user from the DB
+        /// </summary>
+        /// <param name="id">The desired user's ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The user</returns>
+        public async Task<DynamoDBUser> GetUserById(string id, CancellationToken cancellationToken)
         {
-            return await _context.LoadAsync<DynamoDBUser>(Id, _userStoreDBConfig, cancellationToken);
+            return await _context.LoadAsync<DynamoDBUser>(id, _userStoreDBConfig, cancellationToken);
         }
 
-        public async Task<DynamoDBUser> GetUserByAttribute(string Key, string ExpectedValue, CancellationToken cancellationToken)
+        /// <summary>
+        /// Search for users by any of their attributes
+        /// </summary>
+        /// <param name="key">Name of the attribute</param>
+        /// <param name="expectedValue">Value that the attribute will have</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The user. If the search got multiple users, the first user</returns>
+        public async Task<DynamoDBUser> GetUserByAttribute(string key, string expectedValue, CancellationToken cancellationToken)
         {
-            List<ScanCondition> ConditionList = new List<ScanCondition>();
-            ConditionList.Add(new ScanCondition(Key, ScanOperator.Equal, ExpectedValue));
-            AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
-                ConditionList, _userStoreDBConfig
+            List<ScanCondition> conditionList = new List<ScanCondition>();
+            conditionList.Add(new ScanCondition(key, ScanOperator.Equal, expectedValue));
+            AsyncSearch<DynamoDBUser> users = _context.ScanAsync<DynamoDBUser>(
+                conditionList, _userStoreDBConfig
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
-			return UsersList.FirstOrDefault();
+            List<DynamoDBUser> usersList = await users.GetRemainingAsync(cancellationToken);
+			return usersList.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Get a user by a social login. 
+        /// </summary>
+        /// <param name="loginProvider"></param>
+        /// <param name="providerKey"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<DynamoDBUser> GetUserByLogin(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            List<ScanCondition> ConditionList = new List<ScanCondition>();
-            ConditionList.Add(new ScanCondition("LoginProviders", ScanOperator.Contains, loginProvider));
-            ConditionList.Add(new ScanCondition("LoginProviderKeys", ScanOperator.Contains, providerKey));
+            List<ScanCondition> conditionList = new List<ScanCondition>();
+            conditionList.Add(new ScanCondition("LoginProviders", ScanOperator.Contains, loginProvider));
+            conditionList.Add(new ScanCondition("LoginProviderKeys", ScanOperator.Contains, providerKey));
 
-            AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
-                ConditionList, _userStoreDBConfig
+            AsyncSearch<DynamoDBUser> users = _context.ScanAsync<DynamoDBUser>(
+                conditionList, _userStoreDBConfig
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
-            return UsersList.FirstOrDefault();
+            List<DynamoDBUser> usersList = await users.GetRemainingAsync(cancellationToken);
+            return usersList.FirstOrDefault();
         }
 
         public async Task<List<DynamoDBUser>> GetUsersByClaim(Claim claim, CancellationToken cancellationToken)
         {
-            List<ScanCondition> ConditionList = new List<ScanCondition>();
-            ConditionList.Add(new ScanCondition("ClaimTypes", ScanOperator.Contains, claim.Type));
-            ConditionList.Add(new ScanCondition("ClaimValues", ScanOperator.Contains, claim.Value));
+            List<ScanCondition> conditionList = new List<ScanCondition>();
+            conditionList.Add(new ScanCondition("ClaimTypes", ScanOperator.Contains, claim.Type));
+            conditionList.Add(new ScanCondition("ClaimValues", ScanOperator.Contains, claim.Value));
 
-            AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
-                ConditionList, _userStoreDBConfig
+            AsyncSearch<DynamoDBUser> users = _context.ScanAsync<DynamoDBUser>(
+                conditionList, _userStoreDBConfig
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
-            return UsersList;
+            List<DynamoDBUser> usersList = await users.GetRemainingAsync(cancellationToken);
+            return usersList;
         }
 
         public async Task<List<DynamoDBUser>> GetUsersByRole(string roleName, CancellationToken cancellationToken)
         {
-            List<ScanCondition> ConditionList = new List<ScanCondition>();
-            ConditionList.Add(new ScanCondition("Roles", ScanOperator.Contains, roleName));
+            List<ScanCondition> conditionList = new List<ScanCondition>();
+            conditionList.Add(new ScanCondition("Roles", ScanOperator.Contains, roleName));
 
-            AsyncSearch<DynamoDBUser> Users = _context.ScanAsync<DynamoDBUser>(
-                ConditionList, _userStoreDBConfig
+            AsyncSearch<DynamoDBUser> users = _context.ScanAsync<DynamoDBUser>(
+                conditionList, _userStoreDBConfig
             );
-            List<DynamoDBUser> UsersList = await Users.GetRemainingAsync(cancellationToken);
-            return UsersList;
+            List<DynamoDBUser> usersList = await users.GetRemainingAsync(cancellationToken);
+            return usersList;
         }
 
-        public async Task<DynamoDBRole> GetRoleById(string Id, CancellationToken cancellationToken)
+        public async Task<DynamoDBRole> GetRoleById(string id, CancellationToken cancellationToken)
         {
-            return await _context.LoadAsync<DynamoDBRole>(Id, _roleStoreDBConfig, cancellationToken);
+            return await _context.LoadAsync<DynamoDBRole>(id, _roleStoreDBConfig, cancellationToken);
         }
 
-        public async Task<DynamoDBRole> GetRoleByName(string NormalizedName, CancellationToken cancellationToken)
+        public async Task<DynamoDBRole> GetRoleByName(string normalizedName, CancellationToken cancellationToken)
         {
-            List<ScanCondition> ConditionList = new List<ScanCondition>();
-            ConditionList.Add(new ScanCondition("NormalizedName", ScanOperator.Equal, NormalizedName));
+            List<ScanCondition> conditionList = new List<ScanCondition>();
+            conditionList.Add(new ScanCondition("NormalizedName", ScanOperator.Equal, normalizedName));
             AsyncSearch<DynamoDBRole> Roles = _context.ScanAsync<DynamoDBRole>(
-                ConditionList, _roleStoreDBConfig
+                conditionList, _roleStoreDBConfig
             );
             List<DynamoDBRole> RolesList = await Roles.GetRemainingAsync(cancellationToken);
             return RolesList.FirstOrDefault();
