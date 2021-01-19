@@ -122,12 +122,12 @@ namespace ara225.DynamoDBUserStore
         }
 
         /// <summary>
-        /// Get a user by a social login. 
+        /// Get a user by one of the social logins they have used with the site
         /// </summary>
-        /// <param name="loginProvider"></param>
-        /// <param name="providerKey"></param>
+        /// <param name="loginProvider">Name of the provider</param>
+        /// <param name="providerKey">Unique key identifying the user</param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <returns>The first DynamoDBUser matching the query</returns>
         public async Task<DynamoDBUser> GetUserByLogin(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -141,6 +141,12 @@ namespace ara225.DynamoDBUserStore
             return usersList.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Get all users with the provided claim
+        /// </summary>
+        /// <param name="claim">The claim in question</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A list of users with the claim</returns>
         public async Task<List<DynamoDBUser>> GetUsersByClaim(Claim claim, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -154,6 +160,12 @@ namespace ara225.DynamoDBUserStore
             return usersList;
         }
 
+        /// <summary>
+        /// Get users who are in a role.
+        /// </summary>
+        /// <param name="roleName">Normalized role name</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A list of matching users</returns>
         public async Task<List<DynamoDBUser>> GetUsersByRole(string roleName, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -166,11 +178,22 @@ namespace ara225.DynamoDBUserStore
             return usersList;
         }
 
+        /// <summary>
+        /// Get a role by its ID
+        /// </summary>
+        /// <param name="id">Role ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The role in question</returns>
         public async Task<DynamoDBRole> GetRoleById(string id, CancellationToken cancellationToken)
         {
             return await _context.LoadAsync<DynamoDBRole>(id, _roleStoreDBConfig, cancellationToken);
         }
-
+        /// <summary>
+        /// Get a role by its normalized name.
+        /// </summary>
+        /// <param name="normalizedName">Normalized role name</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The role in question</returns>
         public async Task<DynamoDBRole> GetRoleByName(string normalizedName, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -181,6 +204,5 @@ namespace ara225.DynamoDBUserStore
             List<DynamoDBRole> RolesList = await Roles.GetRemainingAsync(cancellationToken);
             return RolesList.FirstOrDefault();
         }
-
     }
 }
