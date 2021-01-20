@@ -1,33 +1,27 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
+﻿/***
+ * Data modal for roles
+ */
+using Amazon.DynamoDBv2.DataModel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore
 {
     [DynamoDBTable(Defaults.DefaultRolesTableName)]
     public class DynamoDBRole 
     {
-        //
-        // Summary:
-        //     Initializes a new instance of the class
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public DynamoDBRole()
         {
             Id = Guid.NewGuid().ToString();
         }
 
-        //
-        // Summary:
-        //     Initializes a new instance of the class
-        //
-        // Parameters:
-        //   roleName:
-        //     The role name.
+        /// <summary>
+        /// Initialize the class with a name
+        /// </summary>
+        /// <param name="roleName">The name for the role</param>
         public DynamoDBRole(string roleName) : this()
         {
             if (roleName == null)
@@ -39,17 +33,30 @@ namespace ara225.DynamoDBUserStore
             NormalizedName = roleName.ToUpper();
         }
 
-        //
-        // Summary:
-        //     Gets or sets the primary key for this user.
+        /// <summary>
+        /// An ID uniquely identifying the role
+        /// </summary>
         [DynamoDBHashKey]
         public string Id { get; set; }
 
+        /// <summary>
+        /// The role's friendly name
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// The role's friendly name in upppercase
+        /// </summary>
         public string NormalizedName { get; set; }
 
+        /// <summary>
+        /// A list of claim types - difficult to store objects in DynamoDB, so condense claims to strings
+        /// </summary>
         public List<string> ClaimTypes { get; set; } = new List<string>();
+
+        /// <summary>
+        /// A list of claim values - difficult to store objects in DynamoDB, so condense claims to strings
+        /// </summary>
         public List<string> ClaimValues { get; set; } = new List<string>();
     }
 }

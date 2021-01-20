@@ -49,7 +49,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="user">The user in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>Bool indicating that the task completed</returns>
+        /// <returns></returns>
         public async Task<bool> SaveUserToDB(DynamoDBUser user, CancellationToken cancellationToken)
         {
             await _context.SaveAsync(user, _userStoreDBConfig, cancellationToken);
@@ -61,7 +61,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>Bool indicating that the task completed</returns>
+        /// <returns></returns>
         public async Task<bool> SaveRoleToDB(DynamoDBRole role, CancellationToken cancellationToken)
         {
             await _context.SaveAsync(role, _roleStoreDBConfig, cancellationToken);
@@ -73,7 +73,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="user">The user in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>Bool indicating that the task completed</returns>
+        /// <returns></returns>
         public async Task<bool> DeleteUser(DynamoDBUser user, CancellationToken cancellationToken)
         {
             await _context.DeleteAsync(user, _userStoreDBConfig, cancellationToken);
@@ -85,7 +85,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>Bool indicating that the task completed</returns>
+        /// <returns></returns>
         public async Task<bool> DeleteRole(DynamoDBRole role, CancellationToken cancellationToken)
         {
             await _context.DeleteAsync(role, _roleStoreDBConfig, cancellationToken);
@@ -97,7 +97,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="id">The desired user's ID</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>The user</returns>
+        /// <returns></returns>
         public async Task<DynamoDBUser> GetUserById(string id, CancellationToken cancellationToken)
         {
             return await _context.LoadAsync<DynamoDBUser>(id, _userStoreDBConfig, cancellationToken);
@@ -109,7 +109,7 @@ namespace ara225.DynamoDBUserStore
         /// <param name="key">Name of the attribute</param>
         /// <param name="expectedValue">Value that the attribute will have</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>The user. If the search got multiple users, the first user</returns>
+        /// <returns></returns>
         public async Task<DynamoDBUser> GetUserByAttribute(string key, string expectedValue, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -127,7 +127,7 @@ namespace ara225.DynamoDBUserStore
         /// <param name="loginProvider">Name of the provider</param>
         /// <param name="providerKey">Unique key identifying the user</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>The first DynamoDBUser matching the query</returns>
+        /// <returns></returns>
         public async Task<DynamoDBUser> GetUserByLogin(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -146,7 +146,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="claim">The claim in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A list of users with the claim</returns>
+        /// <returns></returns>
         public async Task<List<DynamoDBUser>> GetUsersByClaim(Claim claim, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -165,7 +165,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="roleName">Normalized role name</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A list of matching users</returns>
+        /// <returns></returns>
         public async Task<List<DynamoDBUser>> GetUsersByRole(string roleName, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();
@@ -183,7 +183,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="id">Role ID</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>The role in question</returns>
+        /// <returns></returns>
         public async Task<DynamoDBRole> GetRoleById(string id, CancellationToken cancellationToken)
         {
             return await _context.LoadAsync<DynamoDBRole>(id, _roleStoreDBConfig, cancellationToken);
@@ -193,7 +193,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="normalizedName">Normalized role name</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>The role in question</returns>
+        /// <returns></returns>
         public async Task<DynamoDBRole> GetRoleByName(string normalizedName, CancellationToken cancellationToken)
         {
             List<ScanCondition> conditionList = new List<ScanCondition>();

@@ -1,4 +1,7 @@
-﻿using Amazon.DynamoDBv2.DataModel;
+﻿/**
+ * Data model for users
+ */
+using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -9,9 +12,9 @@ namespace ara225.DynamoDBUserStore
     [DynamoDBTable(Defaults.DefaultUsersTableName)]
     public class DynamoDBUser : IdentityUser
     {
-        //
-        // Summary:
-        //     Initializes a new instance of the class
+       /// <summary>
+       /// Default constructor
+       /// </summary>
         public DynamoDBUser()
         {
             Id = Guid.NewGuid().ToString();
@@ -21,13 +24,10 @@ namespace ara225.DynamoDBUserStore
             LockoutEnd = null;
         }
 
-        //
-        // Summary:
-        //     Initializes a new instance of the class
-        //
-        // Parameters:
-        //   userName:
-        //     The user name.
+        /// <summary>
+        /// Initialize the class with a username
+        /// </summary>
+        /// <param name="userName">Desired username</param>
         public DynamoDBUser(string userName) : this()
         {
             if (userName == null)
@@ -37,70 +37,121 @@ namespace ara225.DynamoDBUserStore
 
             UserName = userName;
             NormalizedUserName = userName.ToUpper();
-            CreatedOn = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
         }
 
-        //
-        // Summary:
-        //     Gets or sets the primary key for this user.
+        /// <summary>
+        /// Gets or sets the primary key for the user, a unique ID
+        /// </summary>
         [PersonalData]
         [DynamoDBHashKey]
         override public string Id { get; set; }
 
-        //
-        // Summary:
-        //     Gets or sets the Authenticator key for this user.
-        [PersonalData]
+        /// <summary>
+        ///  Gets or sets the Authenticator key for this user.
+        /// </summary>
+        [ProtectedPersonalData]
         public string AuthenticatorKey { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the normalized username for this user.
+        /// </summary>
+        [ProtectedPersonalData]  
         public string NormalizedUserName { get; set; }
 
-        //
-        // Summary:
-        //     Gets or sets the date the user was created
-        public string CreatedOn { get; set; }
+        /// <summary>
+        /// Could be used to prevent concurrent changes to the same user happening. 
+        /// Not used directly by this module
+        /// </summary>
         public string ConcurrencyStamp { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the normalized email for this user.
+        /// </summary>
+        [ProtectedPersonalData]
         public string NormalizedEmail { get; set; }
 
-
-        //
-        // Summary:
-        //     The login providers used by the current user
+        /// <summary>
+        /// The login providers used by the current user
+        /// </summary>
+        [PersonalData]
         public List<string> LoginProviders { get; set; } = new List<string>();
 
-        //
-        // Summary:
-        //     The login provider keys linked to the current user
+
+        /// <summary>
+        /// The login provider keys linked to the current user
+        /// </summary>
+        [ProtectedPersonalData]
         public List<string> LoginProviderKeys { get; set; } = new List<string>();
 
-        //
-        // Summary:
-        //     The display name of the login providers used by the current user
+        /// <summary>
+        /// The display name of the login providers used by the current user
+        /// </summary>
+        [PersonalData]
         public List<string> LoginProviderDisplayNames { get; set; } = new List<string>();
 
-        //
-        // Summary:
-        //     Two factor recovery codes
+        /// <summary>
+        /// Two factor recovery codes for the user
+        /// </summary>
+        [ProtectedPersonalData]
         public List<string> RecoveryCodes { get; set; } = new List<string>();
 
+        /// <summary>
+        /// The date and time the users lockout expires. null or dates in the past are 
+        /// treated as ended. The converter is needed because DynamoDB doesn't 
+        /// support DateTimeOffsets natively
+        /// </summary>
         [DynamoDBProperty(typeof(DateTimeOffsetConverter))]
         public DateTimeOffset? LockoutEnd { get; set; }
 
+        /// <summary>
+        /// Property we don't need inherited from IdentityUser
+        /// </summary>
         [DynamoDBIgnore]
         public override DateTime? LockoutEndDateUtc { get; set; }
 
+        /// <summary>
+        /// Property we don't need inherited from IdentityUser
+        /// </summary>
         [DynamoDBIgnore]
         public override ICollection<IdentityUserClaim> Claims { get; }
 
+        /// <summary>
+        /// Property we don't need inherited from IdentityUser
+        /// </summary>
         [DynamoDBIgnore]
         public override ICollection<IdentityUserLogin> Logins { get; }
 
+        /// <summary>
+        /// A list of claim types - difficult to store objects in DynamoDB, so condense claims to strings
+        /// </summary>
         public List<string> ClaimTypes { get; set; } = new List<string>();
+
+        /// <summary>
+        /// A list of claim values - difficult to store objects in DynamoDB, so condense claims to strings
+        /// </summary>
         public List<string> ClaimValues { get; set; } = new List<string>();
 
+        /// <summary>
+        /// A list of role names the use is in. Expected to be normalized names
+        /// </summary>
         public new List<string> Roles { get; set; } = new List<string>();
 
+        /// <summary>
+        /// A list of authentication token providers
+        /// </summary>
+        [PersonalData]
         public List<string> TokenLoginProviders { get; set; } = new List<string>();
+
+        /// <summary>
+        /// A list of authentication token names
+        /// </summary>
+        [PersonalData]
         public List<string> TokenNames { get; set; } = new List<string>();
+
+        /// <summary>
+        /// A list of authentication token names
+        /// </summary>
+        [ProtectedPersonalData]
         public List<string> TokenValues { get; set; } = new List<string>();
     }
 }

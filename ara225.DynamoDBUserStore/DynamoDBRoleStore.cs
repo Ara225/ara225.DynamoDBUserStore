@@ -1,6 +1,3 @@
-/**
- * Role store implementation
- */
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -26,7 +23,7 @@ namespace ara225.DynamoDBUserStore
         /// <param name="role">The role object</param>
         /// <param name="claim">The claim object</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task</returns>
+        /// <returns></returns>
         public Task AddClaimAsync(DynamoDBRole role, Claim claim, CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
@@ -42,7 +39,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role object</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping an IdentityResult representing the success of the operation</returns>
+        /// <returns></returns>
         public async Task<IdentityResult> CreateAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -55,7 +52,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role object to delete</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping an IdentityResult representing the success of the operation</returns>
+        /// <returns></returns>
         public async Task<IdentityResult> DeleteAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -72,7 +69,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="roleId">ID to search by</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping a DynamoDBRole or null</returns>
+        /// <returns></returns>
         public async Task<DynamoDBRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -84,7 +81,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="normalizedRoleName">The normalized role name</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping a DynamoDBRole or null</returns>
+        /// <returns></returns>
         public async Task<DynamoDBRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -96,7 +93,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping a IList of claims</returns>
+        /// <returns></returns>
         public Task<IList<Claim>> GetClaimsAsync(DynamoDBRole role, CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
@@ -116,7 +113,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping the role's normalized name</returns>
+        /// <returns></returns>
         public Task<string> GetNormalizedRoleNameAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
@@ -131,7 +128,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping the role's ID</returns>
+        /// <returns></returns>
         public Task<string> GetRoleIdAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
@@ -146,7 +143,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping the role's name</returns>
+        /// <returns></returns>
         public Task<string> GetRoleNameAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
@@ -162,7 +159,7 @@ namespace ara225.DynamoDBUserStore
         /// <param name="role">The role</param>
         /// <param name="claim"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task</returns>
+        /// <returns></returns>
         public Task RemoveClaimAsync(DynamoDBRole role, Claim claim, CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
@@ -180,7 +177,7 @@ namespace ara225.DynamoDBUserStore
         /// <param name="role">The role</param>
         /// <param name="normalizedName">The desired normalized name</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task</returns>
+        /// <returns></returns>
         public Task SetNormalizedRoleNameAsync(DynamoDBRole role, string normalizedName, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
@@ -196,7 +193,7 @@ namespace ara225.DynamoDBUserStore
         /// <param name="role">The role in question</param>
         /// <param name="roleName">The desired role name</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task</returns>
+        /// <returns></returns>
         public Task SetRoleNameAsync(DynamoDBRole role, string roleName, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
@@ -211,7 +208,7 @@ namespace ara225.DynamoDBUserStore
         /// </summary>
         /// <param name="role">The role in question</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A Task wrapping an IdentityResult</returns>
+        /// <returns></returns>
         public async Task<IdentityResult> UpdateAsync(DynamoDBRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
