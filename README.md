@@ -4,7 +4,7 @@ It's designed to be as simple as possible, but it does implement all of the user
 
 # Getting Setup
 ## DynamoDB Tables
-You need to have at least one DynamoDB tables set up: one for users and one for roles, if you're using roles, with a string type partition key called Id. This project doesn't use secondary indexes at the moment.
+You need to have at least one DynamoDB table set up to store users. If you want to use roles, you'll need one for that also. The tables need to have a string type partition key called Id. This project doesn't use secondary indexes at the moment.
 
 ## Project Setup
 I'm going to assume you're using a freshly bootstrapped ASP .NET Core MVC project with authentication enabled and the options for individual user accounts stored in app are enabled. All this work has already been done in the sample. Feel free to submit an issue if you have problems.
@@ -50,12 +50,12 @@ with
 ```
 
 # Running the Sample
-I've included a sample ASP .NET Core app in this repo. It's very basic. It's basically just a plain old ASP .Net Core MVC template with this user store instead of the default. It's configured to connect to a DynamoDB running in Docker. You can reconfigure it to use a cloud DynamoDB (see step 5 above), or setup a local DynamoDB in Docker. I wrote about setting up a local DynamoDB <a href="https://dev.to/ara225/how-to-run-aws-dynamodb-locally-156i">on dev.to here</a> It creates a test user and a test role on startup.
+I've included a sample ASP .NET Core app in this repo. It's basically just a plain old ASP .Net Core MVC template with this user store instead of the default. It's configured to connect to a DynamoDB running in Docker, though you can change this behavior by setting the environment variable CONNECT_TO_CLOUD_DB to anything. I wrote about setting up a local DynamoDB <a href="https://dev.to/ara225/how-to-run-aws-dynamodb-locally-156i">on dev.to here</a> It creates a test user and a test role on startup.
 
-Aside from that setup, it's just a normal ASP .NET Core app; just build it and run it as normal.
+Aside from that setup, it's just a normal ASP .NET Core app.
 
 # Running the Tests
-Uses tests based on the Microsoft tests for Identity <a href="https://github.com/dotnet/aspnetcore/tree/9699b939f94b7524a178821d78addefa5af5d750/src/Identity/Specification.Tests/src">found here</a>. These have an Apache 2.0 license. These are pretty standard tests, just run them as you normally would. They will generate a lot of test users and roles.
+This project uses tests based on the Microsoft tests for Identity <a href="https://github.com/dotnet/aspnetcore/tree/9699b939f94b7524a178821d78addefa5af5d750/src/Identity/Specification.Tests/src">found here</a>. These have an Apache 2.0 license. They're configured to connect to a DynamoDB running in Docker, though you can change this behavior by setting the environment variable CONNECT_TO_CLOUD_DB to anything.
 
 # Future Plans
 This project is fairly complete, and I'm pretty sure it's bug free so there's not much to do. I could implement IQueryableUserStore, but I don't really think it's worth the effort.

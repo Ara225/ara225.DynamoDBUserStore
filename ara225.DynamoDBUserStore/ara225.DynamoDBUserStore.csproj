@@ -9,6 +9,19 @@
 	<!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
 	<IncludeSymbols>true</IncludeSymbols>
 	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<PackageId>ara225.DynamoDBUserStore</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>Anna Aitchison</Authors>
+	<Company>N/A</Company>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<Description>A custom user store for ASP .NET Core Identity built in C#. Designed to allow ASP .NET Core Identity to store user and role data in AWS DynamoDB rather than Microsoft SQL Server etc.
+
+It's designed to be as simple as possible, but it does implement all of the user and role interfaces, except for the IQueryableUserStore. It's fully tested with with XUnit tests and licensed under the MIT license</Description>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageProjectUrl>https://github.com/Ara225/ara225.DynamoDBUserStore</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/Ara225/ara225.DynamoDBUserStore</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>aws;userstore;identity;dynamodb;dynamo;aspnetcore;auth</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +32,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
