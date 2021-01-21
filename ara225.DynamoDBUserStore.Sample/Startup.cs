@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading.Tasks;
 
 namespace ara225.DynamoDBUserStore.Sample
@@ -23,10 +24,16 @@ namespace ara225.DynamoDBUserStore.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             // Add DynamoDB user store
-            // To test with a local DynamoDB in Docker
-            services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new AmazonDynamoDBClient(new AmazonDynamoDBConfig { ServiceURL = "http://localhost:8000" }), "UserStoreTable", "RoleStoreTable"));
-            // To test with DynamoDB in the cloud
-            //services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
+            if (Environment.GetEnvironmentVariable("CONNECT_TO_CLOUD_DB") != null)
+            {
+                // To test with DynamoDB in the cloud
+                services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
+            }
+            else
+            {
+                // To test with a local DynamoDB in Docker
+                services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new AmazonDynamoDBClient(new AmazonDynamoDBConfig { ServiceURL = "http://localhost:8000" }), "UserStoreTable", "RoleStoreTable"));
+            }
             services.AddDefaultIdentity<DynamoDBUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddUserStore<DynamoDBUserStore<DynamoDBUser>>()
                 .AddRoles<DynamoDBRole>()
