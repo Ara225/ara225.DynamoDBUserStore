@@ -9,11 +9,25 @@ You need to have at least one DynamoDB table set up to store users. If you want 
 ## Project Setup
 I'm going to assume you're using a freshly bootstrapped ASP .NET Core MVC project with authentication enabled and the options for individual user accounts stored in app are enabled. All this work has already been done in the sample. Feel free to submit an issue if you have problems.
 
-1. Remove the Microsoft.AspNetCore.EntityFramework.Identity NuGet package from the project
-2. Install the package into your ASP .NET Core project from NuGet (Package ID will be ara225.DynamoDBUserStore)
-3. Replace using statements in the project for Microsoft.AspNetCore.EntityFramework.Identity with using statements for ara225.DynamoDBUserStore
-4. Add a using statement for Amazon.DynamoDBv2 to Startup.cs
-5. In ConfigureServices in Startup.cs, add a singleton to the services collection containing a DynamoDBDataAccessLayer (a class from ara225.DynamoDBUserStore). You need to pass three arguments into it: an AmazonDynamoDBClient (you can pass a AmazonDynamoDBConfig to this to configure it), a string containing the name of the DyanmoDB table for user storage and a string with the name of the roles table (you can put a null or any string if not using Roles).
+1. Remove the NuGet packages below from the project:
+   * Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
+   * Microsoft.AspNetCore.Identity.EntityFrameworkCore
+   * Microsoft.EntityFrameworkCore.SqlServer
+   * Microsoft.EntityFrameworkCore.Tools
+2. Delete the Data folder in the project root
+3. Install the package into your ASP .NET Core project from NuGet (Package ID will be ara225.DynamoDBUserStore)
+4. Replace the line using Microsoft.EntityFrameworkCore; in Startup.cs with using ara225.DynamoDBUserStore;
+5. Remove the using statement for the Data folder from Startup.cs
+6. In ConfigureServices in Startup.cs, remove the following code: 
+```csharp
+services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        Configuration.GetConnectionString("DefaultConnection")));
+services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+```
+
+7. In ConfigureServices in Startup.cs, add a singleton to the services collection containing a DynamoDBDataAccessLayer (a class from ara225.DynamoDBUserStore). You need to pass three arguments into it: an AmazonDynamoDBClient (you can pass a AmazonDynamoDBConfig to this to configure it), a string containing the name of the DyanmoDB table for user storage and a string with the name of the roles table (you can put a null or any string if not using Roles).
 
 To use a local DynamoDB in Docker
 ```csharp
@@ -23,21 +37,24 @@ To use with DynamoDB in the cloud
 ```csharp
 services.AddSingleton<DynamoDBDataAccessLayer>(x => new DynamoDBDataAccessLayer(new Amazon.DynamoDBv2.AmazonDynamoDBClient(), "UserStoreTable", "RoleStoreTable"));
 ```
-6. Add the user store and role store in ConfigureServices in Startup.cs.The options you set in the function passed to AddDefaultIdentity don't really matter for this purpose.
+8. Add the user store and role store in ConfigureServices in Startup.cs.The options you set in the function passed to AddDefaultIdentity don't really matter for this purpose.
 
-Here's a sample to add both user and role stores to Identity:
+Use this code to add both user and role stores to Identity:
 ```csharp
 services.AddDefaultIdentity<DynamoDBUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddUserStore<DynamoDBUserStore<DynamoDBUser>>()
     .AddRoles<DynamoDBRole>()
     .AddRoleStore<DynamoDBRoleStore<DynamoDBRole>>();
 ```
-Here's a sample to add a user store to Identity:
+
+Use this code to add just a user store to Identity:
 ```csharp
 services.AddDefaultIdentity<DynamoDBUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddUserStore<DynamoDBUserStore<DynamoDBUser>>();
 ```
-7. Change the user type in _LoginPartial.cshtml (found in Views/Shared)
+
+9. Remove app.UseDatabaseErrorPage(); from Startup.cs
+10. Change the user type in _LoginPartial.cshtml (found in Views/Shared)
 Replace 
 ```csharp
 @inject SignInManager<IdentityUser> SignInManager
@@ -45,6 +62,7 @@ Replace
 ```
 with
 ```csharp
+@using ara225.DynamoDBUserStore
 @inject SignInManager<DynamoDBUser> SignInManager
 @inject UserManager<DynamoDBUser> UserManager
 ```
