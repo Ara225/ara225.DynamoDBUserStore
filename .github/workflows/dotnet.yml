@@ -32,4 +32,4 @@ jobs:
     - name: Build Release
       run: dotnet build --no-restore --configuration Release
     - name: publish nuget package
-      run: ls;dotnet nuget push  /home/runner/work/ara225.DynamoDBUserStore/ara225.DynamoDBUserStore/ara225.DynamoDBUserStore/bin/Release/netcoreapp3.1/*.nupkg --api-key ${{ secrets.NUGET_DOT_ORG_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: find .;dotnet nuget push  /home/runner/work/ara225.DynamoDBUserStore/ara225.DynamoDBUserStore/ara225.DynamoDBUserStore/bin/Release/netcoreapp3.1/*.nupkg --api-key ${{ secrets.NUGET_DOT_ORG_API_KEY }} --source https://api.nuget.org/v3/index.json
