@@ -34,7 +34,4 @@ jobs:
     - name: CD to project folder
       run: cd ara225.DynamoDBUserStore/bin/Release/netcoreapp3.1
     - name: publish nuget package
-      uses: myci-actions/publish-nuget@2
-      with:
-        filename: '*.nupkg'
-        api-key: ${{ secrets.NUGET_DOT_ORG_API_KEY }}
+      run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_DOT_ORG_API_KEY }} --source https://api.nuget.org/v3/index.json
